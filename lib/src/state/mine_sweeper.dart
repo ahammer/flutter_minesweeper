@@ -20,6 +20,7 @@ abstract class MineSweeper implements Built<MineSweeper, MineSweeperBuilder> {
     final nodes = List<MineSweeperNode>();
     for (int i = 0; i < width * height; i++) {
       nodes.add(MineSweeperNode((b) => b
+        ..neighbours = 0
         ..isVisible = false
         ..isTagged = false));
     }
@@ -53,6 +54,8 @@ abstract class MineSweeper implements Built<MineSweeper, MineSweeperBuilder> {
       return emptyNode;
     }
   }
+
+
 }
 
 final MineSweeperNode emptyNode = MineSweeperNode.emptyNode();

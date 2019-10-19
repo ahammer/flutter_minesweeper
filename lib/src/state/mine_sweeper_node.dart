@@ -12,15 +12,16 @@ abstract class MineSweeperNode
   
   factory MineSweeperNode.emptyNode() => MineSweeperNode((b)=>b
   ..isBomb = false
-  ..isVisible = false);
+  ..isVisible = false
+  ..isTagged = false
+  ..neighbours = 0);
 
   bool get isVisible;
-
   bool get isTagged;
-
+  int get neighbours;
+  
   //We don't decide bombs until after the first tap
   @nullable
-  bool get isBomb;
-
+  bool get isBomb;  
   
 }

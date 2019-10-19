@@ -145,7 +145,7 @@ class MineBlock extends StatelessWidget {
                   : Colors.blueGrey,
               duration: Duration(milliseconds: 300),                            
               child: Center(
-                  child: Text(vm.isVisible ? (vm.isBomb ? "B" : " ") : "?")),
+                  child: Text(vm.isVisible ? (vm.isBomb ? "B" : " ") : "${vm.neighbours}")),
             ),
           ),
         ));

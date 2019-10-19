@@ -12,18 +12,24 @@ class _$MineSweeperNode extends MineSweeperNode {
   @override
   final bool isTagged;
   @override
+  final int neighbours;
+  @override
   final bool isBomb;
 
   factory _$MineSweeperNode([void Function(MineSweeperNodeBuilder) updates]) =>
       (new MineSweeperNodeBuilder()..update(updates)).build();
 
-  _$MineSweeperNode._({this.isVisible, this.isTagged, this.isBomb})
+  _$MineSweeperNode._(
+      {this.isVisible, this.isTagged, this.neighbours, this.isBomb})
       : super._() {
     if (isVisible == null) {
       throw new BuiltValueNullFieldError('MineSweeperNode', 'isVisible');
     }
     if (isTagged == null) {
       throw new BuiltValueNullFieldError('MineSweeperNode', 'isTagged');
+    }
+    if (neighbours == null) {
+      throw new BuiltValueNullFieldError('MineSweeperNode', 'neighbours');
     }
   }
 
@@ -41,13 +47,16 @@ class _$MineSweeperNode extends MineSweeperNode {
     return other is MineSweeperNode &&
         isVisible == other.isVisible &&
         isTagged == other.isTagged &&
+        neighbours == other.neighbours &&
         isBomb == other.isBomb;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc(0, isVisible.hashCode), isTagged.hashCode), isBomb.hashCode));
+        $jc($jc($jc(0, isVisible.hashCode), isTagged.hashCode),
+            neighbours.hashCode),
+        isBomb.hashCode));
   }
 
   @override
@@ -55,6 +64,7 @@ class _$MineSweeperNode extends MineSweeperNode {
     return (newBuiltValueToStringHelper('MineSweeperNode')
           ..add('isVisible', isVisible)
           ..add('isTagged', isTagged)
+          ..add('neighbours', neighbours)
           ..add('isBomb', isBomb))
         .toString();
   }
@@ -72,6 +82,10 @@ class MineSweeperNodeBuilder
   bool get isTagged => _$this._isTagged;
   set isTagged(bool isTagged) => _$this._isTagged = isTagged;
 
+  int _neighbours;
+  int get neighbours => _$this._neighbours;
+  set neighbours(int neighbours) => _$this._neighbours = neighbours;
+
   bool _isBomb;
   bool get isBomb => _$this._isBomb;
   set isBomb(bool isBomb) => _$this._isBomb = isBomb;
@@ -82,6 +96,7 @@ class MineSweeperNodeBuilder
     if (_$v != null) {
       _isVisible = _$v.isVisible;
       _isTagged = _$v.isTagged;
+      _neighbours = _$v.neighbours;
       _isBomb = _$v.isBomb;
       _$v = null;
     }
@@ -105,7 +120,10 @@ class MineSweeperNodeBuilder
   _$MineSweeperNode build() {
     final _$result = _$v ??
         new _$MineSweeperNode._(
-            isVisible: isVisible, isTagged: isTagged, isBomb: isBomb);
+            isVisible: isVisible,
+            isTagged: isTagged,
+            neighbours: neighbours,
+            isBomb: isBomb);
     replace(_$result);
     return _$result;
   }
