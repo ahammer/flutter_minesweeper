@@ -12,21 +12,17 @@ class _$MineSweeper extends MineSweeper {
   @override
   final int height;
   @override
+  final int bombs;
+  @override
   final DateTime startTime;
   @override
-  final BuiltList<bool> visibleList;
-  @override
-  final BuiltList<bool> mineList;
+  final BuiltList<MineSweeperNode> nodes;
 
   factory _$MineSweeper([void Function(MineSweeperBuilder) updates]) =>
       (new MineSweeperBuilder()..update(updates)).build();
 
   _$MineSweeper._(
-      {this.width,
-      this.height,
-      this.startTime,
-      this.visibleList,
-      this.mineList})
+      {this.width, this.height, this.bombs, this.startTime, this.nodes})
       : super._() {
     if (width == null) {
       throw new BuiltValueNullFieldError('MineSweeper', 'width');
@@ -34,14 +30,14 @@ class _$MineSweeper extends MineSweeper {
     if (height == null) {
       throw new BuiltValueNullFieldError('MineSweeper', 'height');
     }
+    if (bombs == null) {
+      throw new BuiltValueNullFieldError('MineSweeper', 'bombs');
+    }
     if (startTime == null) {
       throw new BuiltValueNullFieldError('MineSweeper', 'startTime');
     }
-    if (visibleList == null) {
-      throw new BuiltValueNullFieldError('MineSweeper', 'visibleList');
-    }
-    if (mineList == null) {
-      throw new BuiltValueNullFieldError('MineSweeper', 'mineList');
+    if (nodes == null) {
+      throw new BuiltValueNullFieldError('MineSweeper', 'nodes');
     }
   }
 
@@ -58,19 +54,17 @@ class _$MineSweeper extends MineSweeper {
     return other is MineSweeper &&
         width == other.width &&
         height == other.height &&
+        bombs == other.bombs &&
         startTime == other.startTime &&
-        visibleList == other.visibleList &&
-        mineList == other.mineList;
+        nodes == other.nodes;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc(
-            $jc($jc($jc(0, width.hashCode), height.hashCode),
-                startTime.hashCode),
-            visibleList.hashCode),
-        mineList.hashCode));
+        $jc($jc($jc($jc(0, width.hashCode), height.hashCode), bombs.hashCode),
+            startTime.hashCode),
+        nodes.hashCode));
   }
 
   @override
@@ -78,9 +72,9 @@ class _$MineSweeper extends MineSweeper {
     return (newBuiltValueToStringHelper('MineSweeper')
           ..add('width', width)
           ..add('height', height)
+          ..add('bombs', bombs)
           ..add('startTime', startTime)
-          ..add('visibleList', visibleList)
-          ..add('mineList', mineList))
+          ..add('nodes', nodes))
         .toString();
   }
 }
@@ -96,20 +90,18 @@ class MineSweeperBuilder implements Builder<MineSweeper, MineSweeperBuilder> {
   int get height => _$this._height;
   set height(int height) => _$this._height = height;
 
+  int _bombs;
+  int get bombs => _$this._bombs;
+  set bombs(int bombs) => _$this._bombs = bombs;
+
   DateTime _startTime;
   DateTime get startTime => _$this._startTime;
   set startTime(DateTime startTime) => _$this._startTime = startTime;
 
-  ListBuilder<bool> _visibleList;
-  ListBuilder<bool> get visibleList =>
-      _$this._visibleList ??= new ListBuilder<bool>();
-  set visibleList(ListBuilder<bool> visibleList) =>
-      _$this._visibleList = visibleList;
-
-  ListBuilder<bool> _mineList;
-  ListBuilder<bool> get mineList =>
-      _$this._mineList ??= new ListBuilder<bool>();
-  set mineList(ListBuilder<bool> mineList) => _$this._mineList = mineList;
+  ListBuilder<MineSweeperNode> _nodes;
+  ListBuilder<MineSweeperNode> get nodes =>
+      _$this._nodes ??= new ListBuilder<MineSweeperNode>();
+  set nodes(ListBuilder<MineSweeperNode> nodes) => _$this._nodes = nodes;
 
   MineSweeperBuilder();
 
@@ -117,9 +109,9 @@ class MineSweeperBuilder implements Builder<MineSweeper, MineSweeperBuilder> {
     if (_$v != null) {
       _width = _$v.width;
       _height = _$v.height;
+      _bombs = _$v.bombs;
       _startTime = _$v.startTime;
-      _visibleList = _$v.visibleList?.toBuilder();
-      _mineList = _$v.mineList?.toBuilder();
+      _nodes = _$v.nodes?.toBuilder();
       _$v = null;
     }
     return this;
@@ -146,22 +138,125 @@ class MineSweeperBuilder implements Builder<MineSweeper, MineSweeperBuilder> {
           new _$MineSweeper._(
               width: width,
               height: height,
+              bombs: bombs,
               startTime: startTime,
-              visibleList: visibleList.build(),
-              mineList: mineList.build());
+              nodes: nodes.build());
     } catch (_) {
       String _$failedField;
       try {
-        _$failedField = 'visibleList';
-        visibleList.build();
-        _$failedField = 'mineList';
-        mineList.build();
+        _$failedField = 'nodes';
+        nodes.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'MineSweeper', _$failedField, e.toString());
       }
       rethrow;
     }
+    replace(_$result);
+    return _$result;
+  }
+}
+
+class _$MineSweeperNode extends MineSweeperNode {
+  @override
+  final bool isVisible;
+  @override
+  final bool isTagged;
+  @override
+  final bool isBomb;
+
+  factory _$MineSweeperNode([void Function(MineSweeperNodeBuilder) updates]) =>
+      (new MineSweeperNodeBuilder()..update(updates)).build();
+
+  _$MineSweeperNode._({this.isVisible, this.isTagged, this.isBomb})
+      : super._() {
+    if (isVisible == null) {
+      throw new BuiltValueNullFieldError('MineSweeperNode', 'isVisible');
+    }
+    if (isTagged == null) {
+      throw new BuiltValueNullFieldError('MineSweeperNode', 'isTagged');
+    }
+  }
+
+  @override
+  MineSweeperNode rebuild(void Function(MineSweeperNodeBuilder) updates) =>
+      (toBuilder()..update(updates)).build();
+
+  @override
+  MineSweeperNodeBuilder toBuilder() =>
+      new MineSweeperNodeBuilder()..replace(this);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(other, this)) return true;
+    return other is MineSweeperNode &&
+        isVisible == other.isVisible &&
+        isTagged == other.isTagged &&
+        isBomb == other.isBomb;
+  }
+
+  @override
+  int get hashCode {
+    return $jf($jc(
+        $jc($jc(0, isVisible.hashCode), isTagged.hashCode), isBomb.hashCode));
+  }
+
+  @override
+  String toString() {
+    return (newBuiltValueToStringHelper('MineSweeperNode')
+          ..add('isVisible', isVisible)
+          ..add('isTagged', isTagged)
+          ..add('isBomb', isBomb))
+        .toString();
+  }
+}
+
+class MineSweeperNodeBuilder
+    implements Builder<MineSweeperNode, MineSweeperNodeBuilder> {
+  _$MineSweeperNode _$v;
+
+  bool _isVisible;
+  bool get isVisible => _$this._isVisible;
+  set isVisible(bool isVisible) => _$this._isVisible = isVisible;
+
+  bool _isTagged;
+  bool get isTagged => _$this._isTagged;
+  set isTagged(bool isTagged) => _$this._isTagged = isTagged;
+
+  bool _isBomb;
+  bool get isBomb => _$this._isBomb;
+  set isBomb(bool isBomb) => _$this._isBomb = isBomb;
+
+  MineSweeperNodeBuilder();
+
+  MineSweeperNodeBuilder get _$this {
+    if (_$v != null) {
+      _isVisible = _$v.isVisible;
+      _isTagged = _$v.isTagged;
+      _isBomb = _$v.isBomb;
+      _$v = null;
+    }
+    return this;
+  }
+
+  @override
+  void replace(MineSweeperNode other) {
+    if (other == null) {
+      throw new ArgumentError.notNull('other');
+    }
+    _$v = other as _$MineSweeperNode;
+  }
+
+  @override
+  void update(void Function(MineSweeperNodeBuilder) updates) {
+    if (updates != null) updates(this);
+  }
+
+  @override
+  _$MineSweeperNode build() {
+    final _$result = _$v ??
+        new _$MineSweeperNode._(
+            isVisible: isVisible, isTagged: isTagged, isBomb: isBomb);
     replace(_$result);
     return _$result;
   }
