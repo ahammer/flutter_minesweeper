@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:mine_sweeper/src/state/app_state.dart';
 
 const kBoardEdgePadding = 8.0;
 
@@ -73,11 +75,53 @@ class MineField extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) => LayoutBuilder(builder: (context, constraints) =>
+  StoreConnector<AppState, MineFieldViewModel>(
+    converter: (appState) => MineFieldViewModel(appState.state.mineSweeper.width, appState.state.mineSweeper.height),
+    distinct: true,
+    builder:(ctx, vm){
+      List<Widget> children = List();
+      for (int x=0;x<vm.width;x++) {
+        for (int y=0;y<vm.height;y++) {
+          children.add(MineBlock(x:x,y:y));
+        }
+      }
+
+      return Container(
       color: Colors.black45,
       width: double.infinity,
       height: double.infinity,
+      
+      child: GridView.count(
+        physics: NeverScrollableScrollPhysics(),
+        crossAxisCount: vm.width, children: children, childAspectRatio: constraints.maxWidth/constraints.maxHeight,
+      )
     );
+    }));
+}
+
+class MineFieldViewModel {
+  final int width;
+  final int height;
+
+  MineFieldViewModel(this.width, this.height);
+  
+  //Equals and Hashcode
+  bool operator ==(o) => o is MineFieldViewModel && o.width == width && o.height == height;
+
+  @override  
+  int get hashCode => (width+height).hashCode;
+  
+}
+
+class MineBlock extends StatelessWidget {
+  final int x,y;
+
+  const MineBlock({Key key, this.x, this.y}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {    
+    return Container(color: Colors.amber, height: 20,);
   }
+
 }
