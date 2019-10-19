@@ -44,7 +44,7 @@ class _MineBlockState extends State<MineBlock> {
                 color: vm.isVisible
                     ? (vm.isBomb ? Colors.red : Colors.transparent)
                     : hover ? Colors.blueGrey : Colors.grey,
-                duration: Duration(milliseconds: 66),
+                duration: Duration(milliseconds: 500),
                 child: Center(
                     child: Text(vm.isVisible
                         ? (vm.isBomb ?? false)
