@@ -8,6 +8,7 @@ import 'package:mine_sweeper/src/state/app_state.dart';
 import 'package:mine_sweeper/src/ui/screens/game_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:redux/redux.dart';
+const kFillSpeed = 100;
 
 class MinesweeperApp extends StatefulWidget {
   @override
@@ -20,7 +21,7 @@ class _MinesweeperAppState extends State<MinesweeperApp> {
 
 @override
   void initState() {
-    timer = Timer.periodic(Duration(milliseconds: 300), (_){
+    timer = Timer.periodic(Duration(milliseconds: kFillSpeed), (_){
       store.dispatch(CleanBlanksAction());
     });
     super.initState();

@@ -1,9 +1,9 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:mine_sweeper/src/state/actions/minesweeper_actions.dart';
 import 'package:mine_sweeper/src/state/app_state.dart';
+import 'package:mine_sweeper/src/state/mine_sweeper.dart';
 import 'package:mine_sweeper/src/state/mine_sweeper_node.dart';
 import 'package:provider/provider.dart';
 import 'package:redux/redux.dart';
@@ -58,11 +58,11 @@ class GameBoardHeader extends StatelessWidget {
             Container(color: Colors.red, width: 128, height: 48),
             Expanded(child: Container()),
             Center(
-                child: Container(
+                child: IconButton(
               color: Colors.green,
-              width: 32,
-              height: 32,
-              child: Icon(Icons.face),
+              icon: Icon(Icons.face), onPressed: () {
+                Provider.of<Store<AppState>>(context).dispatch(NewGameAction(MineSweeper.newGame()));
+              },
             )),
             Expanded(child: Container()),
             Container(color: Colors.blue, width: 127, height: 48),
@@ -143,9 +143,9 @@ class MineBlock extends StatelessWidget {
               color: vm.isVisible
                   ? (vm.isBomb ? Colors.red : Colors.green)
                   : Colors.blueGrey,
-              duration: Duration(milliseconds: 300),                            
+              duration: Duration(milliseconds: 200),                            
               child: Center(
-                  child: Text(vm.isVisible ? (vm.isBomb ? "B" : " ") : "${vm.neighbours}")),
+                  child: Text( (vm.isBomb ?? false) ? "Bomb" : "${vm.neighbours}")),
             ),
           ),
         ));

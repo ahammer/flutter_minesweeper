@@ -1,42 +1,37 @@
-import 'dart:math'; 
+import 'dart:math';
 import 'package:built_collection/built_collection.dart';
 import 'package:mine_sweeper/src/scaffolding/mine_redux.dart';
 import 'package:mine_sweeper/src/state/app_state.dart';
 import 'package:mine_sweeper/src/state/mine_sweeper.dart';
 import 'package:mine_sweeper/src/state/mine_sweeper_node.dart';
 
+class NewGameAction extends Reducer {
+  final MineSweeper newGame;
+
+  NewGameAction(this.newGame);
+
+  @override
+  get reducer =>
+      (oldState) => oldState.rebuild((b) => b..mineSweeper.replace(newGame));
+}
+
 class CleanBlanksAction extends Reducer {
   @override
-  AppState Function(AppState oldState) get reducer =>
-      (oldState) => oldState.rebuild((b) {
-            for (int x = 0; x < oldState.mineSweeper.width; x++) {
-              for (int y = 0; y < oldState.mineSweeper.height; y++) {
-                final node = oldState.mineSweeper.getNode(x: x, y: y);
-                //Bombs aren't generated yet, lets not run this
-                if (node.isBomb == null) return b;
+  get reducer => (oldState) => oldState.rebuild((b) {
+        for (int x = 0; x < oldState.mineSweeper.width; x++) {
+          for (int y = 0; y < oldState.mineSweeper.height; y++) {
+            final node = oldState.mineSweeper.getNode(x: x, y: y);
+            //Bombs aren't generated yet, lets not run this
+            if (node.isBomb == null) return b;
 
-                if (!node.isVisible && !node.isBomb) {
-                  final n1 = oldState.mineSweeper.getNode(x: x + 1, y: y);
-                  final n2 = oldState.mineSweeper.getNode(x: x, y: y + 1);
-                  final n3 = oldState.mineSweeper.getNode(x: x - 1, y: y);
-                  final n4 = oldState.mineSweeper.getNode(x: x, y: y - 1);
-
-                  final hasVisibleNeighbour =
-                      (n1 != null && n1.isVisible && !n1.isBomb) ||
-                          (n2 != null && n2.isVisible && !n2.isBomb) ||
-                          (n3 != null && n3.isVisible && !n3.isBomb) ||
-                          (n4 != null && n4.isVisible && !n4.isBomb);
-
-                  if (hasVisibleNeighbour) {
-                    b.mineSweeper.nodes[x + y * oldState.mineSweeper.width] =
-                        node.rebuild((b) => b..isVisible = true);
-                  }
-                }
-              }
+            if (node.isVisible && !node.isBomb && node.neighbours == 0) {
+                flipSurroundingNodes(oldState, b, x, y);                              
             }
+          }
+        }
 
-            return b;
-          });
+        return b;
+      });
 }
 
 class TouchMineSweeperTileAction extends Reducer {
@@ -51,19 +46,44 @@ class TouchMineSweeperTileAction extends Reducer {
             }
 
             //Index position of the node
-            final nodeIdx = y * oldState.mineSweeper.width + x;
-            final node = oldState.mineSweeper.nodes[nodeIdx];
-            final newNode = node.rebuild((b) => b..isVisible = true);
-            b.mineSweeper.nodes[nodeIdx] = newNode;
+            final newNode = flipNode(oldState, b, x, y);
 
             //No bombs yet, lets assign now
             if (newNode.isBomb == null) {
+              //Flip the surrounding nodes (so we are in a blank space)
+              flipSurroundingNodes(oldState, b, x, y);
               assignBombs(b);
             }
+
             return b;
           });
+
 }
 
+  void flipSurroundingNodes(AppState oldState, AppStateBuilder b, int x, int y) {
+    flipNode(oldState, b, x+1, y+1);
+    flipNode(oldState, b, x+1, y);
+    flipNode(oldState, b, x+1, y-1);
+    flipNode(oldState, b, x, y+1);
+    flipNode(oldState, b, x, y-1);
+    flipNode(oldState, b, x-1, y+1);
+    flipNode(oldState, b, x-1, y);
+    flipNode(oldState, b, x-1, y-1);
+  }
+
+  MineSweeperNode flipNode(AppState oldState, AppStateBuilder b, int x, int y) {
+    //Bounds check
+    if ((x >= oldState.mineSweeper.width) ||
+        (y >= oldState.mineSweeper.height) ||
+        (x < 0) ||
+        (y < 0)) return MineSweeperNode.emptyNode();
+
+    final nodeIdx = y * oldState.mineSweeper.width + x;
+    final node = oldState.mineSweeper.nodes[nodeIdx];
+    final newNode = node.rebuild((b) => b..isVisible = true);
+    b.mineSweeper.nodes[nodeIdx] = newNode;
+    return newNode;
+  }
 void assignBombs(AppStateBuilder b) {
   final nodes = b.mineSweeper.nodes;
   final bombCount = b.mineSweeper.bombs;
@@ -102,25 +122,25 @@ void assignBombs(AppStateBuilder b) {
   }
 }
 
-int countNeighbours(int x, int y, int width, int height, ListBuilder<MineSweeperNode> nodes) {  
-    final n1 = getNode(x+1,y+1, width, height, nodes);
-    final n2 = getNode(x+1,y, width, height, nodes);
-    final n3 = getNode(x+1,y-1, width, height, nodes);
-    final n4 = getNode(x,y+1, width, height, nodes);
-    final n5 = getNode(x,y-1, width, height, nodes);
-    final n6 = getNode(x-1,y+1, width, height, nodes);
-    final n7 = getNode(x-1,y, width, height, nodes);
-    final n8 = getNode(x-1,y-1, width, height, nodes);
+int countNeighbours(
+    int x, int y, int width, int height, ListBuilder<MineSweeperNode> nodes) {
+  final n1 = getNode(x + 1, y + 1, width, height, nodes);
+  final n2 = getNode(x + 1, y, width, height, nodes);
+  final n3 = getNode(x + 1, y - 1, width, height, nodes);
+  final n4 = getNode(x, y + 1, width, height, nodes);
+  final n5 = getNode(x, y - 1, width, height, nodes);
+  final n6 = getNode(x - 1, y + 1, width, height, nodes);
+  final n7 = getNode(x - 1, y, width, height, nodes);
+  final n8 = getNode(x - 1, y - 1, width, height, nodes);
 
-    return 
-      (n1.isBomb?1:0)+
-      (n2.isBomb?1:0)+
-      (n3.isBomb?1:0)+
-      (n4.isBomb?1:0)+
-      (n5.isBomb?1:0)+
-      (n6.isBomb?1:0)+
-      (n7.isBomb?1:0)+
-      (n8.isBomb?1:0);      
+  return (n1.isBomb ? 1 : 0) +
+      (n2.isBomb ? 1 : 0) +
+      (n3.isBomb ? 1 : 0) +
+      (n4.isBomb ? 1 : 0) +
+      (n5.isBomb ? 1 : 0) +
+      (n6.isBomb ? 1 : 0) +
+      (n7.isBomb ? 1 : 0) +
+      (n8.isBomb ? 1 : 0);
 }
 
 MineSweeperNode getNode(
