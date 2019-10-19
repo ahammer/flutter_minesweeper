@@ -38,6 +38,6 @@ class _MinesweeperAppState extends State<MinesweeperApp> {
     return Provider.value(
         value: store,
         child: StoreProvider(
-            store: store, child: MaterialApp(home: Scaffold(body:GameScreen()))));
+            store: store, child: MaterialApp(home: GameScreen())));
   }
 }

@@ -101,7 +101,9 @@ MineSweeperNode flipNode(AppState oldState, AppStateBuilder b, int x, int y,
   final node = oldState.mineSweeper.nodes[nodeIdx];
   MineSweeperNode newNode;
   if (flip) {
-    newNode = node.rebuild((b) => b..isVisible = true);
+    if (!node.isTagged) {
+      newNode = node.rebuild((b) => b..isVisible = true);
+    }
   } else {
     newNode = node.rebuild((b) => b..isTagged = !b.isTagged);
   }
