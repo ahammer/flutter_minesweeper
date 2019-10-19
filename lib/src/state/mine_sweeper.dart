@@ -40,6 +40,8 @@ abstract class MineSweeper implements Built<MineSweeper, MineSweeperBuilder> {
   DateTime get startTime;
   BuiltList<MineSweeperNode> get nodes;
 
+  int get flagCount => nodes.fold(0, (value, node)=>value+(node.isTagged?1:0));
+
   //Check for Visible Bombs (That's game over)
 
   bool isGameOver() => nodes.fold(

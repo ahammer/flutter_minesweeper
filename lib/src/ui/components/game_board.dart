@@ -9,6 +9,14 @@ import 'package:redux/redux.dart';
 
 const kBoardEdgePadding = 8.0;
 
+///
+///The GameBoard consisting of the
+///Top Area
+/// - Mines - Flags
+/// - Restart button
+/// - Timer
+///
+///Mine Field
 class GameBoard extends StatelessWidget {
   const GameBoard({
     Key key,
@@ -54,23 +62,61 @@ class GameBoardHeader extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         child: Row(
           children: <Widget>[
-            Container(color: Colors.red, width: 128, height: 48),
+            Container(
+              color: Colors.red,
+              width: 128,
+              height: 48,
+              child: const Center(child: const BombsRemaining()),
+            ),
             Expanded(child: Container()),
             Center(
                 child: FlatButton(
               color: Colors.green,
-              child: Text("😀"),
+              child: Text(
+                "😀",
+                textScaleFactor: 2.0,
+              ),
               onPressed: () {
                 Provider.of<Store<AppState>>(context)
                     .dispatch(NewGameAction(MineSweeper.newGame()));
               },
             )),
             Expanded(child: Container()),
-            Container(color: Colors.blue, width: 127, height: 48),
+            Container(
+                color: Colors.blue,
+                width: 127,
+                height: 48,
+                child: const Center(child: const GameTimer())),
           ],
         ),
       ),
     );
+  }
+}
+
+class GameTimer extends StatelessWidget {
+  const GameTimer();
+
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, String>(
+        converter: (state) =>
+            "${DateTime.now().difference(state.state.mineSweeper.startTime).inSeconds}",
+        builder: (ctx, value) =>
+            Text(value, style: Theme.of(context).textTheme.display1));
+  }
+}
+
+class BombsRemaining extends StatelessWidget {
+  const BombsRemaining();
+
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, String>(
+        converter: (store) =>
+            "${store.state.mineSweeper.bombs - store.state.mineSweeper.flagCount}",
+        builder: (ctx, value) =>
+            Text(value, style: Theme.of(context).textTheme.display1));
   }
 }
 
@@ -122,4 +168,3 @@ class MineFieldViewModel {
   @override
   int get hashCode => (width + height).hashCode;
 }
-
