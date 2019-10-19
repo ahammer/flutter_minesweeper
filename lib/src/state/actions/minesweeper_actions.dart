@@ -25,7 +25,7 @@ class CleanBlanksAction extends Reducer {
             if (node.isBomb == null) return b;
 
             if (node.isVisible && !node.isBomb && node.neighbours == 0) {
-                flipSurroundingNodes(oldState, b, x, y);                              
+              flipSurroundingNodes(oldState, b, x, y);
             }
           }
         }
@@ -57,33 +57,58 @@ class TouchMineSweeperTileAction extends Reducer {
 
             return b;
           });
-
 }
 
-  void flipSurroundingNodes(AppState oldState, AppStateBuilder b, int x, int y) {
-    flipNode(oldState, b, x+1, y+1);
-    flipNode(oldState, b, x+1, y);
-    flipNode(oldState, b, x+1, y-1);
-    flipNode(oldState, b, x, y+1);
-    flipNode(oldState, b, x, y-1);
-    flipNode(oldState, b, x-1, y+1);
-    flipNode(oldState, b, x-1, y);
-    flipNode(oldState, b, x-1, y-1);
-  }
+class FlagMineSweeperTileAction extends Reducer {
+  final int x, y;
 
-  MineSweeperNode flipNode(AppState oldState, AppStateBuilder b, int x, int y) {
-    //Bounds check
-    if ((x >= oldState.mineSweeper.width) ||
-        (y >= oldState.mineSweeper.height) ||
-        (x < 0) ||
-        (y < 0)) return MineSweeperNode.emptyNode();
+  FlagMineSweeperTileAction({this.x, this.y});
+  @override
+  AppState Function(AppState oldState) get reducer =>
+      (oldState) => oldState.rebuild((b) {
+            if (!oldState.mineSweeper.isInBounds(x, y)) {
+              return b;
+            }
 
-    final nodeIdx = y * oldState.mineSweeper.width + x;
-    final node = oldState.mineSweeper.nodes[nodeIdx];
-    final newNode = node.rebuild((b) => b..isVisible = true);
-    b.mineSweeper.nodes[nodeIdx] = newNode;
-    return newNode;
+            flipNode(oldState, b, x, y, flip: false);
+
+            return b;
+          });
+}
+
+void flipSurroundingNodes(AppState oldState, AppStateBuilder b, int x, int y) {
+  flipNode(oldState, b, x + 1, y + 1);
+  flipNode(oldState, b, x + 1, y);
+  flipNode(oldState, b, x + 1, y - 1);
+  flipNode(oldState, b, x, y + 1);
+  flipNode(oldState, b, x, y - 1);
+  flipNode(oldState, b, x - 1, y + 1);
+  flipNode(oldState, b, x - 1, y);
+  flipNode(oldState, b, x - 1, y - 1);
+}
+
+//Flip or Tag a node
+//If flip = false, a tag will be done
+MineSweeperNode flipNode(AppState oldState, AppStateBuilder b, int x, int y,
+    {bool flip = true}) {
+  //Bounds check
+  if ((x >= oldState.mineSweeper.width) ||
+      (y >= oldState.mineSweeper.height) ||
+      (x < 0) ||
+      (y < 0)) return MineSweeperNode.emptyNode();
+
+  final nodeIdx = y * oldState.mineSweeper.width + x;
+  final node = oldState.mineSweeper.nodes[nodeIdx];
+  MineSweeperNode newNode;
+  if (flip) {
+    newNode = node.rebuild((b) => b..isVisible = true);
+  } else {
+    newNode = node.rebuild((b) => b..isTagged = !b.isTagged);
   }
+  b.mineSweeper.nodes[nodeIdx] = newNode;
+  return newNode;
+}
+
 void assignBombs(AppStateBuilder b) {
   final nodes = b.mineSweeper.nodes;
   final bombCount = b.mineSweeper.bombs;

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:mine_sweeper/src/state/actions/minesweeper_actions.dart';
@@ -60,8 +59,10 @@ class GameBoardHeader extends StatelessWidget {
             Center(
                 child: FlatButton(
               color: Colors.green,
-              child: Text("😀"), onPressed: () {
-                Provider.of<Store<AppState>>(context).dispatch(NewGameAction(MineSweeper.newGame()));
+              child: Text("😀"),
+              onPressed: () {
+                Provider.of<Store<AppState>>(context)
+                    .dispatch(NewGameAction(MineSweeper.newGame()));
               },
             )),
             Expanded(child: Container()),
@@ -122,30 +123,49 @@ class MineFieldViewModel {
   int get hashCode => (width + height).hashCode;
 }
 
-class MineBlock extends StatelessWidget {
+class MineBlock extends StatefulWidget {
   final int x, y;
 
   const MineBlock({Key key, this.x, this.y}) : super(key: key);
+
+  @override
+  _MineBlockState createState() => _MineBlockState();
+}
+
+class _MineBlockState extends State<MineBlock> {
+  bool hover = false;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.all(2.0),
         child: StoreConnector<AppState, MineSweeperNode>(
-          converter: (state) => state.state.mineSweeper.getNode(x: x, y: y),
+          converter: (state) => state.state.mineSweeper.getNode(x: widget.x, y: widget.y),
           distinct: true,
           builder: (context, vm) => GestureDetector(
             onTap: () {
               Provider.of<Store<AppState>>(context)
-                  .dispatch(TouchMineSweeperTileAction(x: x, y: y));
+                  .dispatch(TouchMineSweeperTileAction(x: widget.x, y: widget.y));
             },
-            child: AnimatedContainer(
-              color: vm.isVisible
-                  ? (vm.isBomb ? Colors.red : Colors.transparent)
-                  : Colors.blueGrey,
-              duration: Duration(milliseconds: 66),                            
-              child: Center(
-                  child: Text( vm.isVisible?(vm.isBomb ?? false) ? "💣" : "${vm.neighbours == 0?"":vm.neighbours}":"❓")),
+            onLongPress: () {
+              Provider.of<Store<AppState>>(context)
+                  .dispatch(FlagMineSweeperTileAction(x: widget.x, y: widget.y));
+            },
+            child: MouseRegion(
+              onEnter: (_)=> setState(() => hover = true),
+              onExit: (_)=> setState(() => hover = false),
+                          child: AnimatedContainer(
+                color: vm.isVisible
+                    ? (vm.isBomb ? Colors.red : Colors.transparent)
+                    : hover?Colors.blueGrey:Colors.grey,
+                duration: Duration(milliseconds: 66),
+                child: Center(
+                    child: Text(vm.isVisible
+                        ? (vm.isBomb ?? false)
+                            ? "💣"
+                            : "${vm.neighbours == 0 ? "" : vm.neighbours}"
+                        : (vm.isTagged?"🏳":"❓"))),
+              ),
             ),
           ),
         ));
