@@ -36,7 +36,9 @@ class _MineBlockState extends State<MineBlock> {
                   FlagMineSweeperTileAction(x: widget.x, y: widget.y));
             },
             child: MouseRegion(
-              onEnter: (_) => setState(() => hover = true),
+              onEnter: (_) => setState(() {                
+                hover = !Provider.of<Store<AppState>>(context).state.mineSweeper.isGameOver();
+              }),
               onExit: (_) => setState(() => hover = false),
               child: AnimatedContainer(
                 color: vm.isVisible
