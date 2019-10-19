@@ -1,5 +1,9 @@
 import 'package:built_value/built_value.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:flutter/foundation.dart';
+
+import 'package:mine_sweeper/src/state/mine_sweeper_node.dart';
+
 part 'mine_sweeper.g.dart';
 
 //This will represent the App State
@@ -9,6 +13,7 @@ abstract class MineSweeper implements Built<MineSweeper, MineSweeperBuilder> {
   factory MineSweeper([void Function(MineSweeperBuilder) updates]) =
       _$MineSweeper;
 
+  
   //Factory constructor to create a new game
   factory MineSweeper.newGame(
       {int width = 20, int height = 20, int bombs = 10}) {
@@ -28,6 +33,7 @@ abstract class MineSweeper implements Built<MineSweeper, MineSweeperBuilder> {
       ..startTime = DateTime.now()
       ..nodes.replace(nodes));
   }
+  
 
   int get width;
   int get height;
@@ -36,24 +42,14 @@ abstract class MineSweeper implements Built<MineSweeper, MineSweeperBuilder> {
   BuiltList<MineSweeperNode> get nodes;
 
   //Check for Visible Bombs (That's game over)
+  
   bool isGameOver() => nodes.fold(
       false, (gameOver, node) => gameOver || (node.isVisible && node.isBomb));
+
+  bool isInBounds(int x, int y) => x >= 0 && y >= 0 && x < width && y < height;
+
+  MineSweeperNode getNode({@required int x, @required int y}) =>
+      nodes[x + y * width];
+      
 }
 
-//Represents a node on the MineSweeper board
-//Tracks visibility, whether it's a bomb, or if it's been tagged
-abstract class MineSweeperNode
-    implements Built<MineSweeperNode, MineSweeperNodeBuilder> {
-  MineSweeperNode._();
-
-  factory MineSweeperNode([void Function(MineSweeperNodeBuilder) updates]) =
-      _$MineSweeperNode;
-
-  bool get isVisible;
-
-  bool get isTagged;
-
-  //We don't decide bombs until after the first tap
-  @nullable
-  bool get isBomb;
-}

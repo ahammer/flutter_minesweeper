@@ -18,4 +18,6 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
 
   //The current game board
   MineSweeper get mineSweeper;
+
+  
 }
