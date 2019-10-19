@@ -98,26 +98,24 @@ class GameTimer extends StatelessWidget {
   const GameTimer();
 
   @override
-  Widget build(BuildContext context) {
-    return StoreConnector<AppState, String>(
-        converter: (state) =>
-            "${DateTime.now().difference(state.state.mineSweeper.startTime).inSeconds}",
-        builder: (ctx, value) =>
-            Text(value, style: Theme.of(context).textTheme.display1));
-  }
+  Widget build(BuildContext context) => StoreConnector<AppState, String>(
+      converter: (state) =>
+          "${(state.state.mineSweeper.gameOverTime ?? DateTime.now()).difference(state.state.mineSweeper.startTime).inSeconds}",
+      distinct: true,
+      builder: (ctx, value) =>
+          Text(value, style: Theme.of(context).textTheme.display1));
 }
 
 class BombsRemaining extends StatelessWidget {
   const BombsRemaining();
 
   @override
-  Widget build(BuildContext context) {
-    return StoreConnector<AppState, String>(
-        converter: (store) =>
-            "${store.state.mineSweeper.bombs - store.state.mineSweeper.flagCount}",
-        builder: (ctx, value) =>
-            Text(value, style: Theme.of(context).textTheme.display1));
-  }
+  Widget build(BuildContext context) => StoreConnector<AppState, String>(
+      converter: (store) =>
+          "${store.state.mineSweeper.bombs - store.state.mineSweeper.flagCount}",
+      distinct: true,
+      builder: (ctx, value) =>
+          Text(value, style: Theme.of(context).textTheme.display1));
 }
 
 class MineField extends StatelessWidget {

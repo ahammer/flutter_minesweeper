@@ -16,13 +16,20 @@ class _$MineSweeper extends MineSweeper {
   @override
   final DateTime startTime;
   @override
+  final DateTime gameOverTime;
+  @override
   final BuiltList<MineSweeperNode> nodes;
 
   factory _$MineSweeper([void Function(MineSweeperBuilder) updates]) =>
       (new MineSweeperBuilder()..update(updates)).build();
 
   _$MineSweeper._(
-      {this.width, this.height, this.bombs, this.startTime, this.nodes})
+      {this.width,
+      this.height,
+      this.bombs,
+      this.startTime,
+      this.gameOverTime,
+      this.nodes})
       : super._() {
     if (width == null) {
       throw new BuiltValueNullFieldError('MineSweeper', 'width');
@@ -56,14 +63,19 @@ class _$MineSweeper extends MineSweeper {
         height == other.height &&
         bombs == other.bombs &&
         startTime == other.startTime &&
+        gameOverTime == other.gameOverTime &&
         nodes == other.nodes;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc($jc(0, width.hashCode), height.hashCode), bombs.hashCode),
-            startTime.hashCode),
+        $jc(
+            $jc(
+                $jc($jc($jc(0, width.hashCode), height.hashCode),
+                    bombs.hashCode),
+                startTime.hashCode),
+            gameOverTime.hashCode),
         nodes.hashCode));
   }
 
@@ -74,6 +86,7 @@ class _$MineSweeper extends MineSweeper {
           ..add('height', height)
           ..add('bombs', bombs)
           ..add('startTime', startTime)
+          ..add('gameOverTime', gameOverTime)
           ..add('nodes', nodes))
         .toString();
   }
@@ -98,6 +111,11 @@ class MineSweeperBuilder implements Builder<MineSweeper, MineSweeperBuilder> {
   DateTime get startTime => _$this._startTime;
   set startTime(DateTime startTime) => _$this._startTime = startTime;
 
+  DateTime _gameOverTime;
+  DateTime get gameOverTime => _$this._gameOverTime;
+  set gameOverTime(DateTime gameOverTime) =>
+      _$this._gameOverTime = gameOverTime;
+
   ListBuilder<MineSweeperNode> _nodes;
   ListBuilder<MineSweeperNode> get nodes =>
       _$this._nodes ??= new ListBuilder<MineSweeperNode>();
@@ -111,6 +129,7 @@ class MineSweeperBuilder implements Builder<MineSweeper, MineSweeperBuilder> {
       _height = _$v.height;
       _bombs = _$v.bombs;
       _startTime = _$v.startTime;
+      _gameOverTime = _$v.gameOverTime;
       _nodes = _$v.nodes?.toBuilder();
       _$v = null;
     }
@@ -140,6 +159,7 @@ class MineSweeperBuilder implements Builder<MineSweeper, MineSweeperBuilder> {
               height: height,
               bombs: bombs,
               startTime: startTime,
+              gameOverTime: gameOverTime,
               nodes: nodes.build());
     } catch (_) {
       String _$failedField;

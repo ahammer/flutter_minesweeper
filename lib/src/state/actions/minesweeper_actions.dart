@@ -15,6 +15,7 @@ class NewGameAction extends Reducer {
       (oldState) => oldState.rebuild((b) => b..mineSweeper.replace(newGame));
 }
 
+
 class CleanBlanksAction extends Reducer {
   @override
   get reducer => (oldState) => oldState.rebuild((b) {
@@ -41,7 +42,7 @@ class TouchMineSweeperTileAction extends Reducer {
   @override
   AppState Function(AppState oldState) get reducer =>
       (oldState) => oldState.rebuild((b) {
-            if (!oldState.mineSweeper.isInBounds(x, y)) {
+            if (!oldState.mineSweeper.isInBounds(x, y) || oldState.mineSweeper.isGameOver()) {
               return b;
             }
 
@@ -55,6 +56,9 @@ class TouchMineSweeperTileAction extends Reducer {
               assignBombs(b);
             }
 
+            if (newNode.isBomb ?? false) {
+              b.mineSweeper.gameOverTime = DateTime.now();
+            } 
             return b;
           });
 }

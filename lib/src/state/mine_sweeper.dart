@@ -38,14 +38,17 @@ abstract class MineSweeper implements Built<MineSweeper, MineSweeperBuilder> {
   int get height;
   int get bombs;
   DateTime get startTime;
+
+  @nullable
+  DateTime get gameOverTime;
+
   BuiltList<MineSweeperNode> get nodes;
 
   int get flagCount => nodes.fold(0, (value, node)=>value+(node.isTagged?1:0));
 
   //Check for Visible Bombs (That's game over)
 
-  bool isGameOver() => nodes.fold(
-      false, (gameOver, node) => gameOver || (node.isVisible && node.isBomb));
+  bool isGameOver() => gameOverTime != null;
 
   bool isInBounds(int x, int y) => x >= 0 && y >= 0 && x < width && y < height;
 
