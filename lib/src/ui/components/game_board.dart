@@ -58,9 +58,9 @@ class GameBoardHeader extends StatelessWidget {
             Container(color: Colors.red, width: 128, height: 48),
             Expanded(child: Container()),
             Center(
-                child: IconButton(
+                child: FlatButton(
               color: Colors.green,
-              icon: Icon(Icons.face), onPressed: () {
+              child: Text("😀"), onPressed: () {
                 Provider.of<Store<AppState>>(context).dispatch(NewGameAction(MineSweeper.newGame()));
               },
             )),
@@ -141,11 +141,11 @@ class MineBlock extends StatelessWidget {
             },
             child: AnimatedContainer(
               color: vm.isVisible
-                  ? (vm.isBomb ? Colors.red : Colors.green)
+                  ? (vm.isBomb ? Colors.red : Colors.transparent)
                   : Colors.blueGrey,
-              duration: Duration(milliseconds: 200),                            
+              duration: Duration(milliseconds: 66),                            
               child: Center(
-                  child: Text( (vm.isBomb ?? false) ? "Bomb" : "${vm.neighbours}")),
+                  child: Text( vm.isVisible?(vm.isBomb ?? false) ? "💣" : "${vm.neighbours == 0?"":vm.neighbours}":"❓")),
             ),
           ),
         ));
