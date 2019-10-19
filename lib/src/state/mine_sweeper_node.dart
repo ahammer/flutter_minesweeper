@@ -9,6 +9,10 @@ abstract class MineSweeperNode
 
   factory MineSweeperNode([void Function(MineSweeperNodeBuilder) updates]) =
       _$MineSweeperNode;
+  
+  factory MineSweeperNode.emptyNode() => MineSweeperNode((b)=>b
+  ..isBomb = false
+  ..isVisible = false);
 
   bool get isVisible;
 
@@ -17,4 +21,6 @@ abstract class MineSweeperNode
   //We don't decide bombs until after the first tap
   @nullable
   bool get isBomb;
+
+  
 }

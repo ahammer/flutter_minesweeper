@@ -13,7 +13,6 @@ abstract class MineSweeper implements Built<MineSweeper, MineSweeperBuilder> {
   factory MineSweeper([void Function(MineSweeperBuilder) updates]) =
       _$MineSweeper;
 
-  
   //Factory constructor to create a new game
   factory MineSweeper.newGame(
       {int width = 10, int height = 10, int bombs = 20}) {
@@ -33,7 +32,6 @@ abstract class MineSweeper implements Built<MineSweeper, MineSweeperBuilder> {
       ..startTime = DateTime.now()
       ..nodes.replace(nodes));
   }
-  
 
   int get width;
   int get height;
@@ -42,14 +40,19 @@ abstract class MineSweeper implements Built<MineSweeper, MineSweeperBuilder> {
   BuiltList<MineSweeperNode> get nodes;
 
   //Check for Visible Bombs (That's game over)
-  
+
   bool isGameOver() => nodes.fold(
       false, (gameOver, node) => gameOver || (node.isVisible && node.isBomb));
 
   bool isInBounds(int x, int y) => x >= 0 && y >= 0 && x < width && y < height;
 
-  MineSweeperNode getNode({@required int x, @required int y}) =>
-      nodes[x + y * width];
-      
+  MineSweeperNode getNode({@required int x, @required int y}) {
+    try {
+      return nodes[x + y * width];
+    } catch (exception) {
+      return emptyNode;
+    }
+  }
 }
 
+final MineSweeperNode emptyNode = MineSweeperNode.emptyNode();
