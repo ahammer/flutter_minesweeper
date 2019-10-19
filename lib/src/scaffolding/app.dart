@@ -15,6 +15,6 @@ class MinesweeperApp extends StatelessWidget {
     return Provider.value(
         value: store,
         child: StoreProvider(
-            store: store, child: MaterialApp(home: GameScreen())));
+            store: store, child: MaterialApp(home: Material(child:GameScreen()))));
   }
 }
