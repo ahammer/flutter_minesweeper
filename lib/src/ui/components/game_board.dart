@@ -129,7 +129,8 @@ class MineField extends StatelessWidget {
           StoreConnector<AppState, MineFieldViewModel>(
               converter: (appState) => MineFieldViewModel(
                   appState.state.mineSweeper.width,
-                  appState.state.mineSweeper.height),
+                  appState.state.mineSweeper.height,
+                  appState.state.mineSweeper.isGameOver()),
               distinct: true,
               builder: (ctx, vm) {
                 List<Widget> children = List();
@@ -139,30 +140,47 @@ class MineField extends StatelessWidget {
                   }
                 }
 
-                return Container(
-                    color: Colors.black45,
-                    width: double.infinity,
-                    height: double.infinity,
-                    child: GridView.count(
+                return Stack(
+                  children: <Widget>[
+                    GridView.count(
                       physics: NeverScrollableScrollPhysics(),
                       crossAxisCount: vm.width,
                       children: children,
                       childAspectRatio:
                           constraints.maxWidth / constraints.maxHeight,
-                    ));
+                    ),
+                    IgnorePointer(
+                        child: AnimatedOpacity(
+                            opacity: vm.gameOver ? 1 : 0,
+                            duration: Duration(seconds: 1),
+                            child: Container(
+                                width: double.infinity,
+                                height: double.infinity,
+                                color: Theme.of(context).colorScheme.surface.withOpacity(0.6),
+                                child: Center(
+                                    child: Text(
+                                  "Game Over",
+                                  style: Theme.of(context).textTheme.display4,
+                                )))))
+                  ],
+                );
               }));
 }
 
 class MineFieldViewModel {
   final int width;
   final int height;
+  final bool gameOver;
 
-  MineFieldViewModel(this.width, this.height);
+  MineFieldViewModel(this.width, this.height, this.gameOver);
 
   //Equals and Hashcode
   bool operator ==(o) =>
-      o is MineFieldViewModel && o.width == width && o.height == height;
+      o is MineFieldViewModel &&
+      o.width == width &&
+      o.height == height &&
+      o.gameOver == gameOver;
 
   @override
-  int get hashCode => (width + height).hashCode;
+  int get hashCode => (width + height + (gameOver ? 1 : 0)).hashCode;
 }
