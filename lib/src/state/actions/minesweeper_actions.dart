@@ -42,7 +42,7 @@ class TouchMineSweeperTileAction extends Reducer {
   @override
   AppState Function(AppState oldState) get reducer =>
       (oldState) => oldState.rebuild((b) {
-            if (!oldState.mineSweeper.isInBounds(x, y) || oldState.mineSweeper.isGameOver()) {
+            if (!oldState.mineSweeper.isInBounds(x, y) || oldState.mineSweeper.isGameOver) {
               return b;
             }
 
@@ -70,12 +70,11 @@ class FlagMineSweeperTileAction extends Reducer {
   @override
   AppState Function(AppState oldState) get reducer =>
       (oldState) => oldState.rebuild((b) {
-            if (!oldState.mineSweeper.isInBounds(x, y)) {
+            if (!oldState.mineSweeper.isInBounds(x, y) || oldState.mineSweeper.isGameOver) {
               return b;
             }
 
-            flipNode(oldState, b, x, y, flip: false);
-
+            flipNode(oldState, b, x, y, flip: false);            
             return b;
           });
 }
@@ -146,8 +145,6 @@ void assignBombs(AppStateBuilder b) {
       int count = countNeighbours(x, y, width, height, nodes);
       final idx = x + y * width;
       final node = nodes[idx];
-      //int neighbours = boardWithoutCounts.bombNeighbours(x: x, y: y);
-      //print("$x $y $neighbours" );
       nodes[idx] = node.rebuild((b) => b..neighbours = count);
     }
   }

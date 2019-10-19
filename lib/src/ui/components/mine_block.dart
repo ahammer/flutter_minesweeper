@@ -37,7 +37,7 @@ class _MineBlockState extends State<MineBlock> {
             },
             child: MouseRegion(
               onEnter: (_) => setState(() {                
-                hover = !Provider.of<Store<AppState>>(context).state.mineSweeper.isGameOver();
+                hover = !Provider.of<Store<AppState>>(context).state.mineSweeper.isGameOver;
               }),
               onExit: (_) => setState(() => hover = false),
               child: AnimatedContainer(

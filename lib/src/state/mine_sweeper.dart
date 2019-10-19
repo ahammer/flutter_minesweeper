@@ -15,7 +15,7 @@ abstract class MineSweeper implements Built<MineSweeper, MineSweeperBuilder> {
 
   //Factory constructor to create a new game
   factory MineSweeper.newGame(
-      {int width = 20, int height = 20, int bombs = 100}) {
+      {int width = 10, int height = 10, int bombs = 1}) {
     //Build the node list
     final nodes = List<MineSweeperNode>();
     for (int i = 0; i < width * height; i++) {
@@ -46,9 +46,21 @@ abstract class MineSweeper implements Built<MineSweeper, MineSweeperBuilder> {
 
   int get flagCount => nodes.fold(0, (value, node)=>value+(node.isTagged?1:0));
 
+  int get notFlipped => nodes.fold(0, (value, node)=>value+(node.isVisible?0:1));
   //Check for Visible Bombs (That's game over)
 
-  bool isGameOver() => gameOverTime != null;
+  bool get isWin => flagCount == bombs && notFlipped == bombs;
+  bool get isGameOver {
+    if (gameOverTime != null) {
+      return true;
+    }
+    //Win condition    
+    if (isWin) {
+      return true;
+    }
+
+    return false;
+  }
 
   bool isInBounds(int x, int y) => x >= 0 && y >= 0 && x < width && y < height;
 

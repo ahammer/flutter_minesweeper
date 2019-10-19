@@ -130,7 +130,8 @@ class MineField extends StatelessWidget {
               converter: (appState) => MineFieldViewModel(
                   appState.state.mineSweeper.width,
                   appState.state.mineSweeper.height,
-                  appState.state.mineSweeper.isGameOver()),
+                  appState.state.mineSweeper.isGameOver,
+                  appState.state.mineSweeper.isWin),
               distinct: true,
               builder: (ctx, vm) {
                 List<Widget> children = List();
@@ -156,11 +157,18 @@ class MineField extends StatelessWidget {
                             child: Container(
                                 width: double.infinity,
                                 height: double.infinity,
-                                color: Theme.of(context).colorScheme.surface.withOpacity(0.6),
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .surface
+                                    .withOpacity(0.6),
                                 child: Center(
                                     child: Text(
-                                  "Game Over",
-                                  style: Theme.of(context).textTheme.display4,
+                                  vm.gameOver
+                                      ? vm.win
+                                          ? "🔥🔥 You Win 🔥🔥"
+                                          : "💩💩 Game Over 💩💩"
+                                      : "",
+                                  style: Theme.of(context).textTheme.display1,
                                 )))))
                   ],
                 );
@@ -171,8 +179,9 @@ class MineFieldViewModel {
   final int width;
   final int height;
   final bool gameOver;
+  final bool win;
 
-  MineFieldViewModel(this.width, this.height, this.gameOver);
+  MineFieldViewModel(this.width, this.height, this.gameOver, this.win);
 
   //Equals and Hashcode
   bool operator ==(o) =>
