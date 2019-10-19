@@ -16,7 +16,7 @@ abstract class MineSweeper implements Built<MineSweeper, MineSweeperBuilder> {
   
   //Factory constructor to create a new game
   factory MineSweeper.newGame(
-      {int width = 20, int height = 20, int bombs = 10}) {
+      {int width = 10, int height = 10, int bombs = 20}) {
     //Build the node list
     final nodes = List<MineSweeperNode>();
     for (int i = 0; i < width * height; i++) {

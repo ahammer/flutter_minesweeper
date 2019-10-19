@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:mine_sweeper/src/state/actions/minesweeper_actions.dart';
 import 'package:mine_sweeper/src/state/app_state.dart';
+import 'package:mine_sweeper/src/state/mine_sweeper_node.dart';
+import 'package:provider/provider.dart';
+import 'package:redux/redux.dart';
 
 const kBoardEdgePadding = 8.0;
 
@@ -123,8 +127,15 @@ class MineBlock extends StatelessWidget {
   Widget build(BuildContext context) {    
     return Padding(
       padding: const EdgeInsets.all(2.0),
-      child: RaisedButton(child: Text("?"), onPressed: () {},),
-    );
+      child: StoreConnector<AppState, MineSweeperNode>(
+        converter: (state)=>state.state.mineSweeper.getNode(x:x, y:y),
+        distinct: true,
+        builder:(context, vm)=>RaisedButton(child: Text(vm.isVisible?(vm.isBomb?"B":" "):"?"), 
+        onPressed: () {
+          print("Dispatching");
+          Provider.of<Store<AppState>>(context).dispatch(TouchMineSweeperTileAction(x:x, y:y));
+        }),
+    ));
   }
 
 }
