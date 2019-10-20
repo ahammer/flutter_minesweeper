@@ -7,7 +7,7 @@ import 'package:mine_sweeper/src/ui/components/mine_block.dart';
 import 'package:provider/provider.dart';
 import 'package:redux/redux.dart';
 
-const kBoardEdgePadding = 8.0;
+const kBoardEdgePadding = 2.0;
 
 ///
 ///The GameBoard consisting of the
@@ -56,36 +56,30 @@ class GameBoardHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Row(
-          children: <Widget>[
-            const Expanded(
-              child: const Card(
-                  child: const Center(child: const BombsRemaining())),
-            ),
-            Expanded(child: Container()),
-            Center(
-                child: Card(
-                  child: FlatButton(
-              
+      child: Row(
+        children: <Widget>[
+          const Expanded(
+            child: const Center(child: const BombsRemaining()),
+          ),
+          Expanded(child: Container()),
+          Center(
+              child: Card(
+            child: FlatButton(
               child: Text(
-                  "😀",
-                  textScaleFactor: 2.0,
+                "😀",
+                textScaleFactor: 1.5,
               ),
               onPressed: () {
-                  Provider.of<Store<AppState>>(context)
-                      .dispatch(NewGameAction(MineSweeper.newGame()));
+                Provider.of<Store<AppState>>(context)
+                    .dispatch(NewGameAction(MineSweeper.newGame()));
               },
             ),
-                )),
-            Expanded(child: Container()),
-            const Expanded(
-              child: const Card(
-                  child: const Center(child: const GameTimer())),
-            ),
-          ],
-        ),
+          )),
+          Expanded(child: Container()),
+          const Expanded(
+            child: const Center(child: const GameTimer()),
+          ),
+        ],
       ),
     );
   }
@@ -96,8 +90,10 @@ class GameTimer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => StoreConnector<AppState, String>(
-      converter: (state) =>
-          "${(state.state.mineSweeper.gameOverTime ?? DateTime.now()).difference(state.state.mineSweeper.startTime).inSeconds}",
+      converter: (store) {
+        if (store.state.mineSweeper == null) return "";
+        return "${(store.state.mineSweeper.gameOverTime ?? DateTime.now()).difference(store.state.mineSweeper.startTime).inSeconds}";
+      },
       distinct: true,
       builder: (ctx, value) =>
           Text(value, style: Theme.of(context).textTheme.display1));
@@ -108,8 +104,10 @@ class BombsRemaining extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => StoreConnector<AppState, String>(
-      converter: (store) =>
-          "${store.state.mineSweeper.bombs - store.state.mineSweeper.flagCount}",
+      converter: (store) {
+        if (store.state.mineSweeper == null) return "";
+        return "${(store.state.mineSweeper.bombs) - store.state.mineSweeper.flagCount}";
+      },
       distinct: true,
       builder: (ctx, value) =>
           Text(value, style: Theme.of(context).textTheme.display1));
@@ -124,11 +122,23 @@ class MineField extends StatelessWidget {
   Widget build(BuildContext context) => LayoutBuilder(
       builder: (context, constraints) =>
           StoreConnector<AppState, MineFieldViewModel>(
-              converter: (appState) => MineFieldViewModel(
-                  appState.state.mineSweeper.width,
-                  appState.state.mineSweeper.height,
-                  appState.state.mineSweeper.isGameOver,
-                  appState.state.mineSweeper.isWin),
+              converter: (store) {
+                if (store.state.mineSweeper != null) {
+                  return MineFieldViewModel(
+                      width: store.state.mineSweeper.width,
+                      height: store.state.mineSweeper.height,
+                      gameOver: store.state.mineSweeper.isGameOver,
+                      win: store.state.mineSweeper.isWin,
+                      started: true);
+                } else {
+                  return MineFieldViewModel(
+                      width: 0,
+                      height: 0,
+                      gameOver: true,
+                      win: false,
+                      started: false);
+                }
+              },
               distinct: true,
               builder: (ctx, vm) {
                 List<Widget> children = List();
@@ -140,13 +150,17 @@ class MineField extends StatelessWidget {
 
                 return Stack(
                   children: <Widget>[
-                    GridView.count(
-                      physics: NeverScrollableScrollPhysics(),
-                      crossAxisCount: vm.width,
-                      children: children,
-                      childAspectRatio:
-                          constraints.maxWidth / constraints.maxHeight,
-                    ),
+                    ...vm.started
+                        ? [
+                            GridView.count(
+                              physics: NeverScrollableScrollPhysics(),
+                              crossAxisCount: vm.width,
+                              children: children,
+                              childAspectRatio:
+                                  constraints.maxWidth / constraints.maxHeight,
+                            )
+                          ]
+                        : [],
                     IgnorePointer(
                         child: AnimatedOpacity(
                             opacity: vm.gameOver ? 1 : 0,
@@ -160,11 +174,11 @@ class MineField extends StatelessWidget {
                                     .withOpacity(0.6),
                                 child: Center(
                                     child: Text(
-                                  vm.gameOver
+                                  vm.started? vm.gameOver
                                       ? vm.win
                                           ? "🔥🔥 You Win 🔥🔥"
                                           : "💩💩 Game Over 💩💩"
-                                      : "",
+                                      : "":"Flutter Minesweeper",
                                   style: Theme.of(context).textTheme.display1,
                                 )))))
                   ],
@@ -173,12 +187,14 @@ class MineField extends StatelessWidget {
 }
 
 class MineFieldViewModel {
+  final bool started;
   final int width;
   final int height;
   final bool gameOver;
   final bool win;
 
-  MineFieldViewModel(this.width, this.height, this.gameOver, this.win);
+  MineFieldViewModel(
+      {this.width, this.height, this.gameOver, this.win, this.started});
 
   //Equals and Hashcode
   bool operator ==(o) =>

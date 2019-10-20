@@ -18,6 +18,7 @@ class NewGameAction extends Reducer {
 class CleanBlanksAction extends Reducer {
   @override
   get reducer => (oldState) => oldState.rebuild((b) {
+        if (oldState.mineSweeper == null) return oldState;
         for (int x = 0; x < oldState.mineSweeper.width; x++) {
           for (int y = 0; y < oldState.mineSweeper.height; y++) {
             final node = oldState.mineSweeper.getNode(x: x, y: y);

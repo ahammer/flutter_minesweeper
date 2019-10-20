@@ -10,13 +10,13 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
 
   //Get the default, no-args App State
   factory AppState.getDefault() => AppState((b) => b
-    ..theme = "Light"
-    ..mineSweeper.replace(MineSweeper.newGame()));
+    ..theme = "Light");
 
   //The current theme
   String get theme;
 
   //The current game board
+  @nullable
   MineSweeper get mineSweeper;
 
   

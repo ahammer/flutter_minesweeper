@@ -19,9 +19,6 @@ class _$AppState extends AppState {
     if (theme == null) {
       throw new BuiltValueNullFieldError('AppState', 'theme');
     }
-    if (mineSweeper == null) {
-      throw new BuiltValueNullFieldError('AppState', 'mineSweeper');
-    }
   }
 
   @override
@@ -95,12 +92,12 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
     _$AppState _$result;
     try {
       _$result = _$v ??
-          new _$AppState._(theme: theme, mineSweeper: mineSweeper.build());
+          new _$AppState._(theme: theme, mineSweeper: _mineSweeper?.build());
     } catch (_) {
       String _$failedField;
       try {
         _$failedField = 'mineSweeper';
-        mineSweeper.build();
+        _mineSweeper?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'AppState', _$failedField, e.toString());
