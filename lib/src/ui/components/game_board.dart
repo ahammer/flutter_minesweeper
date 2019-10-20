@@ -24,24 +24,24 @@ class GameBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(        
+    return Container(
         child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                  kBoardEdgePadding, kBoardEdgePadding, kBoardEdgePadding, 0),
-              child: GameBoardHeader(),
-            ),
-            Expanded(
-                child: Container(
-              width: double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.all(kBoardEdgePadding),
-                child: MineField(),
-              ),
-            ))
-          ],
-        ));
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+              kBoardEdgePadding, kBoardEdgePadding, kBoardEdgePadding, 0),
+          child: GameBoardHeader(),
+        ),
+        Expanded(
+            child: Container(
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.all(kBoardEdgePadding),
+            child: MineField(),
+          ),
+        ))
+      ],
+    ));
   }
 }
 
@@ -55,37 +55,35 @@ class GameBoardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blueGrey,
+    return Card(
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Row(
           children: <Widget>[
-            Container(
-              color: Colors.red,
-              width: 128,
-              height: 48,
-              child: const Center(child: const BombsRemaining()),
+            const Expanded(
+              child: const Card(
+                  child: const Center(child: const BombsRemaining())),
             ),
             Expanded(child: Container()),
             Center(
-                child: FlatButton(
-              color: Colors.green,
+                child: Card(
+                  child: FlatButton(
+              
               child: Text(
-                "😀",
-                textScaleFactor: 2.0,
+                  "😀",
+                  textScaleFactor: 2.0,
               ),
               onPressed: () {
-                Provider.of<Store<AppState>>(context)
-                    .dispatch(NewGameAction(MineSweeper.newGame()));
+                  Provider.of<Store<AppState>>(context)
+                      .dispatch(NewGameAction(MineSweeper.newGame()));
               },
-            )),
+            ),
+                )),
             Expanded(child: Container()),
-            Container(
-                color: Colors.blue,
-                width: 127,
-                height: 48,
-                child: const Center(child: const GameTimer())),
+            const Expanded(
+              child: const Card(
+                  child: const Center(child: const GameTimer())),
+            ),
           ],
         ),
       ),

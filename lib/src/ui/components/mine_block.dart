@@ -65,18 +65,17 @@ class _MineBlockState extends State<MineBlock> {
 bombBox(BuildContext context) =>
     BoxDecoration(color: Colors.red,
     borderRadius: BorderRadius.circular(50)
-    , boxShadow: [BoxShadow()]);
+    , boxShadow: [BoxShadow(color: Colors.blue)]);
 
 hoverBox(BuildContext context) =>
-    BoxDecoration(color: Theme.of(context).colorScheme.surface,
-    borderRadius: BorderRadius.circular(15)
-    , boxShadow: [BoxShadow(color: Colors.black, blurRadius: 3, spreadRadius: 3)]);
+    BoxDecoration(color: Theme.of(context).colorScheme.primaryVariant,    
+    boxShadow: [BoxShadow(color: Colors.black, blurRadius: 4, spreadRadius: 4)]);
 
 unknownBox(BuildContext context) =>
-    BoxDecoration(color: Theme.of(context).colorScheme.surface    
-    , boxShadow: [BoxShadow(color: Colors.black, blurRadius: 3, spreadRadius: 1)]);
+    BoxDecoration(color: Theme.of(context).colorScheme.primaryVariant    
+    , boxShadow: [BoxShadow(color: Colors.blue, blurRadius: 3, spreadRadius: 1)]);
 
 cleanBox(BuildContext context) =>
     BoxDecoration(color: Theme.of(context).colorScheme.surface,
-    boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 2)] );
+    boxShadow: [BoxShadow(color: Colors.blue.withOpacity(0.1), blurRadius: 2)] );
 
