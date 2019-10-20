@@ -63,18 +63,16 @@ class GameBoardHeader extends StatelessWidget {
           ),
           Expanded(child: Container()),
           Center(
-              child: Card(
-            child: FlatButton(
-              child: Text(
-                "😀",
-                textScaleFactor: 1.5,
-              ),
-              onPressed: () {
-                Provider.of<Store<AppState>>(context)
-                    .dispatch(NewGameAction(MineSweeper.newGame()));
-              },
-            ),
-          )),
+              child: FlatButton(
+                child: Text(
+                  "😀",
+                  textScaleFactor: 1.5,
+                ),
+                onPressed: () {
+                  Provider.of<Store<AppState>>(context)
+                      .dispatch(NewGameAction(MineSweeper.newGame()));
+                },
+              )),
           Expanded(child: Container()),
           const Expanded(
             child: const Center(child: const GameTimer()),
@@ -96,7 +94,7 @@ class GameTimer extends StatelessWidget {
       },
       distinct: true,
       builder: (ctx, value) =>
-          Text(value, style: Theme.of(context).textTheme.display1));
+          Text(value, style: Theme.of(context).textTheme.title));
 }
 
 class BombsRemaining extends StatelessWidget {
@@ -110,7 +108,7 @@ class BombsRemaining extends StatelessWidget {
       },
       distinct: true,
       builder: (ctx, value) =>
-          Text(value, style: Theme.of(context).textTheme.display1));
+          Text(value, style: Theme.of(context).textTheme.title));
 }
 
 class MineField extends StatelessWidget {
