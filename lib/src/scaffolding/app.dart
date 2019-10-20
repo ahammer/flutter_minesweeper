@@ -9,7 +9,7 @@ import 'package:mine_sweeper/src/ui/screens/game_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:redux/redux.dart';
 
-const kFillSpeed = 500;
+const kFillSpeed = 33;
 
 class MinesweeperApp extends StatefulWidget {
   @override
@@ -43,6 +43,7 @@ class _MinesweeperAppState extends State<MinesweeperApp> {
             store: store,
             child: StoreConnector<AppState, String>(
                 converter: (store) => store.state.theme,
+                distinct: true,
                 builder: (context, value) => MaterialApp(
                       home: GameScreen(),
                       theme: (value == "Dark")

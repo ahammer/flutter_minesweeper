@@ -15,12 +15,13 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
     ..theme = "Light"
     ..difficulty = "Easy");
 
-  //The current theme
+  //The current theme ("Light" or "Dark")
   String get theme;
+
+  //The current difficulty ("Easy, Medium, Hard")
+  String get difficulty;  
 
   //The current game board
   @nullable
   MineSweeper get mineSweeper;
-
-  String get difficulty;  
 }

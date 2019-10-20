@@ -20,6 +20,7 @@ class _MineBlockState extends State<MineBlock> {
 
   @override
   Widget build(BuildContext context) {
+    bool isGameOver = Provider.of<Store<AppState>>(context).state.mineSweeper.isGameOver;
     return LayoutId(
         id: "grid:${widget.x}:${widget.y}",
         child: StoreConnector<AppState, MineSweeperNode>(
@@ -55,7 +56,7 @@ class _MineBlockState extends State<MineBlock> {
                         ? (vm.isBomb ?? false)
                             ? "💣"
                             : "${vm.neighbours == 0 ? "" : vm.neighbours}"
-                        : (vm.isTagged ? "🏳" : ""))),
+                        : (vm.isTagged ? "🏳" : (isGameOver && vm.isBomb)?"💣":""))),
               ),
             ),
           ),
@@ -70,7 +71,7 @@ bombBox(BuildContext context) => BoxDecoration(
     );
 
 flagBox(BuildContext context) => BoxDecoration(
-      color: Theme.of(context).colorScheme.secondary,
+      color: Theme.of(context).colorScheme.primaryVariant,
       borderRadius: BorderRadius.circular(50),
       border: Border.all(color: Colors.green),
     );
@@ -88,5 +89,5 @@ unknownBox(BuildContext context) => BoxDecoration(
 
 cleanBox(BuildContext context) => BoxDecoration(
       color: Theme.of(context).colorScheme.surface,
-      border: Border.all(color: Colors.white),
+      border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.3), width: 1),
     );
