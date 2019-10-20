@@ -15,7 +15,6 @@ class NewGameAction extends Reducer {
       (oldState) => oldState.rebuild((b) => b..mineSweeper.replace(newGame));
 }
 
-
 class CleanBlanksAction extends Reducer {
   @override
   get reducer => (oldState) => oldState.rebuild((b) {
@@ -42,7 +41,8 @@ class TouchMineSweeperTileAction extends Reducer {
   @override
   AppState Function(AppState oldState) get reducer =>
       (oldState) => oldState.rebuild((b) {
-            if (!oldState.mineSweeper.isInBounds(x, y) || oldState.mineSweeper.isGameOver) {
+            if (!oldState.mineSweeper.isInBounds(x, y) ||
+                oldState.mineSweeper.isGameOver) {
               return b;
             }
 
@@ -53,12 +53,12 @@ class TouchMineSweeperTileAction extends Reducer {
             if (newNode.isBomb == null) {
               //Flip the surrounding nodes (so we are in a blank space)
               flipSurroundingNodes(oldState, b, x, y);
-              assignBombs(b);
+              _assignBombs(b);
             }
 
             if (newNode.isBomb ?? false) {
               b.mineSweeper.gameOverTime = DateTime.now();
-            } 
+            }
             return b;
           });
 }
@@ -70,11 +70,12 @@ class FlagMineSweeperTileAction extends Reducer {
   @override
   AppState Function(AppState oldState) get reducer =>
       (oldState) => oldState.rebuild((b) {
-            if (!oldState.mineSweeper.isInBounds(x, y) || oldState.mineSweeper.isGameOver) {
+            if (!oldState.mineSweeper.isInBounds(x, y) ||
+                oldState.mineSweeper.isGameOver) {
               return b;
             }
 
-            flipNode(oldState, b, x, y, flip: false);            
+            flipNode(oldState, b, x, y, flip: false);
             return b;
           });
 }
@@ -114,7 +115,7 @@ MineSweeperNode flipNode(AppState oldState, AppStateBuilder b, int x, int y,
   return newNode;
 }
 
-void assignBombs(AppStateBuilder b) {
+void _assignBombs(AppStateBuilder b) {
   final nodes = b.mineSweeper.nodes;
   final bombCount = b.mineSweeper.bombs;
   final width = b.mineSweeper.width;
@@ -142,7 +143,7 @@ void assignBombs(AppStateBuilder b) {
 
   for (int x = 0; x < width; x++) {
     for (int y = 0; y < height; y++) {
-      int count = countNeighbours(x, y, width, height, nodes);
+      int count = _countNeighbours(x, y, width, height, nodes);
       final idx = x + y * width;
       final node = nodes[idx];
       nodes[idx] = node.rebuild((b) => b..neighbours = count);
@@ -150,29 +151,24 @@ void assignBombs(AppStateBuilder b) {
   }
 }
 
-int countNeighbours(
+int _countNeighbours(
     int x, int y, int width, int height, ListBuilder<MineSweeperNode> nodes) {
-  final n1 = getNode(x + 1, y + 1, width, height, nodes);
-  final n2 = getNode(x + 1, y, width, height, nodes);
-  final n3 = getNode(x + 1, y - 1, width, height, nodes);
-  final n4 = getNode(x, y + 1, width, height, nodes);
-  final n5 = getNode(x, y - 1, width, height, nodes);
-  final n6 = getNode(x - 1, y + 1, width, height, nodes);
-  final n7 = getNode(x - 1, y, width, height, nodes);
-  final n8 = getNode(x - 1, y - 1, width, height, nodes);
-
-  return (n1.isBomb ? 1 : 0) +
-      (n2.isBomb ? 1 : 0) +
-      (n3.isBomb ? 1 : 0) +
-      (n4.isBomb ? 1 : 0) +
-      (n5.isBomb ? 1 : 0) +
-      (n6.isBomb ? 1 : 0) +
-      (n7.isBomb ? 1 : 0) +
-      (n8.isBomb ? 1 : 0);
+  List<MineSweeperNode> neighbours = List();
+  neighbours.add(_getNode(x + 1, y + 1, width, height, nodes) ?? emptyNode);
+  neighbours.add(_getNode(x + 1, y, width, height, nodes) ?? emptyNode);
+  neighbours.add(_getNode(x + 1, y - 1, width, height, nodes) ?? emptyNode);
+  neighbours.add(_getNode(x, y + 1, width, height, nodes) ?? emptyNode);
+  neighbours.add(_getNode(x, y - 1, width, height, nodes) ?? emptyNode);
+  neighbours.add(_getNode(x - 1, y + 1, width, height, nodes) ?? emptyNode);
+  neighbours.add(_getNode(x - 1, y, width, height, nodes) ?? emptyNode);
+  neighbours.add(_getNode(x - 1, y - 1, width, height, nodes) ?? emptyNode);
+  print(neighbours);
+  return neighbours.fold(0, (value, node) => value + (node.isBomb ? 1 : 0));
 }
 
-MineSweeperNode getNode(
+MineSweeperNode _getNode(
     int x, int y, int width, int height, ListBuilder<MineSweeperNode> nodes) {
+  if (x < 0 || y < 0 || x >= width || y >= height) return emptyNode;
   int idx = x + y * width;
   try {
     return nodes[idx];
