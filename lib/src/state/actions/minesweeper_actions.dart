@@ -6,15 +6,15 @@ import 'package:mine_sweeper/src/state/mine_sweeper.dart';
 import 'package:mine_sweeper/src/state/mine_sweeper_node.dart';
 
 final difficultySizes = {
-  "easy": 50,
-  "medium": 40,
-  "hard": 30,  
+  "Easy": 50,
+  "Medium": 40,
+  "Hard": 30,  
 };
 
 final difficultyBombPercentages = {
-  "easy": 0.1,
-  "medium": 0.2,
-  "hard": 0.3,  
+  "Easy": 0.1,
+  "Medium": 0.2,
+  "Hard": 0.3,  
 };
 
 class NewGameAction extends Reducer {
@@ -186,8 +186,7 @@ int _countNeighbours(
   neighbours.add(_getNode(x, y - 1, width, height, nodes) ?? emptyNode);
   neighbours.add(_getNode(x - 1, y + 1, width, height, nodes) ?? emptyNode);
   neighbours.add(_getNode(x - 1, y, width, height, nodes) ?? emptyNode);
-  neighbours.add(_getNode(x - 1, y - 1, width, height, nodes) ?? emptyNode);
-  print(neighbours);
+  neighbours.add(_getNode(x - 1, y - 1, width, height, nodes) ?? emptyNode);  
   return neighbours.fold(0, (value, node) => value + (node.isBomb ? 1 : 0));
 }
 

@@ -13,16 +13,20 @@ class GameScreen extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(        
         actions: <Widget>[
+          Container(width:20),
+          Center(child: ThemeSelectWidget()),
+          Container(width:20),
           Center(child: GameDifficultyWidget()),
           Center(child: IconButton(icon: Icon(Icons.play_arrow), onPressed: () {
             final store = Provider.of<Store<AppState>>(context);
             final query = MediaQuery.of(context);
             store.dispatch(NewGameAction(difficulty: store.state.difficulty, width: query.size.width.toInt(), height: query.size.height.toInt()));
           })),
+          Expanded(child: Container()),
           Center(child: Container(child: BombsRemaining())),    
           Center(child:GameTimer()),    
-          Expanded(child: Container(),),
-          Center(child: ThemeSelectWidget())
+          
+          
         ],
       ),
       body: GameBoard());
@@ -65,7 +69,7 @@ class GameDifficultyWidget extends StatelessWidget {
       builder:(ctx, value)=>DropdownButton(
         value: value,
       items: <DropdownMenuItem>[
-        ...["easy", "medium", "hard"]
+        ...["Easy", "Medium", "Hard"]
             .map((s) => DropdownMenuItem(value: s, child: Text(s)))
       ],
       onChanged: (value) {

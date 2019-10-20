@@ -13,7 +13,7 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   //Get the default, no-args App State
   factory AppState.getDefault() => AppState((b) => b
     ..theme = "Light"
-    ..difficulty = "easy");
+    ..difficulty = "Easy");
 
   //The current theme
   String get theme;
