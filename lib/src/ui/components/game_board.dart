@@ -24,8 +24,7 @@ class GameBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        color: Colors.grey,
+    return Container(        
         child: Column(
           children: <Widget>[
             Padding(

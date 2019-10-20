@@ -8,6 +8,7 @@ import 'package:mine_sweeper/src/state/app_state.dart';
 import 'package:mine_sweeper/src/ui/screens/game_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:redux/redux.dart';
+
 const kFillSpeed = 100;
 
 class MinesweeperApp extends StatefulWidget {
@@ -16,12 +17,13 @@ class MinesweeperApp extends StatefulWidget {
 }
 
 class _MinesweeperAppState extends State<MinesweeperApp> {
-  final store = Store<AppState>(minesweepReducer, initialState: AppState.getDefault());
+  final store =
+      Store<AppState>(minesweepReducer, initialState: AppState.getDefault());
   Timer timer;
 
-@override
+  @override
   void initState() {
-    timer = Timer.periodic(Duration(milliseconds: kFillSpeed), (_){
+    timer = Timer.periodic(Duration(milliseconds: kFillSpeed), (_) {
       store.dispatch(CleanBlanksAction());
     });
     super.initState();
@@ -32,12 +34,20 @@ class _MinesweeperAppState extends State<MinesweeperApp> {
     timer.cancel();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-    
     return Provider.value(
         value: store,
         child: StoreProvider(
-            store: store, child: MaterialApp(home: GameScreen())));
+            store: store,
+            child: StoreConnector<AppState, String>(
+                converter: (store) => store.state.theme,
+                builder: (context, value) => MaterialApp(
+                      home: GameScreen(),
+                      theme: (value == "Dark")
+                          ? ThemeData.dark()
+                          : ThemeData.light(),
+                    ))));
   }
 }
