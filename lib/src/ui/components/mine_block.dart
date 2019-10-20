@@ -53,7 +53,7 @@ class _MineBlockState extends State<MineBlock> {
                       ? (vm.isBomb ?? false)
                           ? "💣"
                           : "${vm.neighbours == 0 ? "" : vm.neighbours}"
-                      : (vm.isTagged ? "🏳" : "❓"))),
+                      : (vm.isTagged ? "🏳" : ""))),
             ),
           ),
         ),
