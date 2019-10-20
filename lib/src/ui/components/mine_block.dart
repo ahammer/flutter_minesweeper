@@ -20,7 +20,7 @@ class _MineBlockState extends State<MineBlock> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return LayoutId(id:"grid:${widget.x}:${widget.y}", child:Padding(
       padding: const EdgeInsets.all(2.0),
       child: StoreConnector<AppState, MineSweeperNode>(
         converter: (state) =>
@@ -60,7 +60,7 @@ class _MineBlockState extends State<MineBlock> {
           ),
         ),
       ),
-    );
+    ));
   }
 }
 

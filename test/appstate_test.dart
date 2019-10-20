@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mine_sweeper/src/state/actions/set_theme_action.dart';
+import 'package:mine_sweeper/src/state/actions/game_actions.dart';
 import 'package:mine_sweeper/src/state/app_state.dart';
 
 main() {

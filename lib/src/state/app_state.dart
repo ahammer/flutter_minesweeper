@@ -5,12 +5,15 @@ part 'app_state.g.dart';
 
 //This will represent the App State
 abstract class AppState implements Built<AppState, AppStateBuilder> {
+  
+
   AppState._();
   factory AppState([void Function(AppStateBuilder) updates]) = _$AppState;
 
   //Get the default, no-args App State
   factory AppState.getDefault() => AppState((b) => b
-    ..theme = "Light");
+    ..theme = "Light"
+    ..difficulty = "easy");
 
   //The current theme
   String get theme;
@@ -19,5 +22,5 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   @nullable
   MineSweeper get mineSweeper;
 
-  
+  String get difficulty;  
 }

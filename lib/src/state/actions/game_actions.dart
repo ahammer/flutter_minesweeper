@@ -8,3 +8,11 @@ class SetThemeAction extends Reducer {
   @override
   get reducer => (oldState) => oldState.rebuild((b) => b..theme = theme);
 }
+
+class SetDifficultyAction extends Reducer {
+  final String difficulty;
+  SetDifficultyAction(this.difficulty);
+
+  @override
+  get reducer => (oldState) => oldState.rebuild((b) => b..difficulty = difficulty);
+}

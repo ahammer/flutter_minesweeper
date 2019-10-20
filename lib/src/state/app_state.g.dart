@@ -11,13 +11,18 @@ class _$AppState extends AppState {
   final String theme;
   @override
   final MineSweeper mineSweeper;
+  @override
+  final String difficulty;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
       (new AppStateBuilder()..update(updates)).build();
 
-  _$AppState._({this.theme, this.mineSweeper}) : super._() {
+  _$AppState._({this.theme, this.mineSweeper, this.difficulty}) : super._() {
     if (theme == null) {
       throw new BuiltValueNullFieldError('AppState', 'theme');
+    }
+    if (difficulty == null) {
+      throw new BuiltValueNullFieldError('AppState', 'difficulty');
     }
   }
 
@@ -33,19 +38,22 @@ class _$AppState extends AppState {
     if (identical(other, this)) return true;
     return other is AppState &&
         theme == other.theme &&
-        mineSweeper == other.mineSweeper;
+        mineSweeper == other.mineSweeper &&
+        difficulty == other.difficulty;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, theme.hashCode), mineSweeper.hashCode));
+    return $jf($jc($jc($jc(0, theme.hashCode), mineSweeper.hashCode),
+        difficulty.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('AppState')
           ..add('theme', theme)
-          ..add('mineSweeper', mineSweeper))
+          ..add('mineSweeper', mineSweeper)
+          ..add('difficulty', difficulty))
         .toString();
   }
 }
@@ -63,12 +71,17 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   set mineSweeper(MineSweeperBuilder mineSweeper) =>
       _$this._mineSweeper = mineSweeper;
 
+  String _difficulty;
+  String get difficulty => _$this._difficulty;
+  set difficulty(String difficulty) => _$this._difficulty = difficulty;
+
   AppStateBuilder();
 
   AppStateBuilder get _$this {
     if (_$v != null) {
       _theme = _$v.theme;
       _mineSweeper = _$v.mineSweeper?.toBuilder();
+      _difficulty = _$v.difficulty;
       _$v = null;
     }
     return this;
@@ -92,7 +105,10 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
     _$AppState _$result;
     try {
       _$result = _$v ??
-          new _$AppState._(theme: theme, mineSweeper: _mineSweeper?.build());
+          new _$AppState._(
+              theme: theme,
+              mineSweeper: _mineSweeper?.build(),
+              difficulty: difficulty);
     } catch (_) {
       String _$failedField;
       try {

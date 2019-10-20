@@ -5,14 +5,38 @@ import 'package:mine_sweeper/src/state/app_state.dart';
 import 'package:mine_sweeper/src/state/mine_sweeper.dart';
 import 'package:mine_sweeper/src/state/mine_sweeper_node.dart';
 
-class NewGameAction extends Reducer {
-  final MineSweeper newGame;
+final difficultySizes = {
+  "easy": 50,
+  "medium": 40,
+  "hard": 30,  
+};
 
-  NewGameAction(this.newGame);
+final difficultyBombPercentages = {
+  "easy": 0.1,
+  "medium": 0.2,
+  "hard": 0.3,  
+};
+
+class NewGameAction extends Reducer {
+  final String difficulty;
+  final int width;
+  final int height;
+
+  NewGameAction({this.difficulty, this.width, this.height});
 
   @override
-  get reducer =>
-      (oldState) => oldState.rebuild((b) => b..mineSweeper.replace(newGame));
+  get reducer {
+    final w = (width~/difficultySizes[difficulty]);
+    final h = (height~/difficultySizes[difficulty]);
+    return (oldState) => oldState.rebuild((b) {
+      return b
+      ..mineSweeper.replace(MineSweeper.newGame(
+        width: w,
+        height: h,
+        bombs: ((w*h) * difficultyBombPercentages[difficulty]).toInt()
+      ));
+    });
+  }
 }
 
 class CleanBlanksAction extends Reducer {
