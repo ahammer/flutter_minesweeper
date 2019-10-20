@@ -23,8 +23,11 @@ class GameScreen extends StatelessWidget {
             store.dispatch(NewGameAction(difficulty: store.state.difficulty, width: query.size.width.toInt(), height: query.size.height.toInt()));
           })),
           Expanded(child: Container()),
+          
           Center(child: Container(child: BombsRemaining())),    
+          Container(width:20),
           Center(child:GameTimer()),    
+          Container(width:20),
           
           
         ],

@@ -9,7 +9,7 @@ import 'package:mine_sweeper/src/ui/screens/game_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:redux/redux.dart';
 
-const kFillSpeed = 300;
+const kFillSpeed = 500;
 
 class MinesweeperApp extends StatefulWidget {
   @override

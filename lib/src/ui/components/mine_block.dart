@@ -20,75 +20,73 @@ class _MineBlockState extends State<MineBlock> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutId(id:"grid:${widget.x}:${widget.y}", child:Padding(
-      padding: const EdgeInsets.all(2.0),
-      child: StoreConnector<AppState, MineSweeperNode>(
-        converter: (state) =>
-            state.state.mineSweeper.getNode(x: widget.x, y: widget.y),
-        distinct: true,
-        builder: (context, vm) => GestureDetector(
-          onTap: () {
-            Provider.of<Store<AppState>>(context)
-                .dispatch(TouchMineSweeperTileAction(x: widget.x, y: widget.y));
-          },
-          onLongPress: () {
-            Provider.of<Store<AppState>>(context)
-                .dispatch(FlagMineSweeperTileAction(x: widget.x, y: widget.y));
-          },
-          child: MouseRegion(
-            onEnter: (_) => setState(() {
-              hover = !Provider.of<Store<AppState>>(context)
-                  .state
-                  .mineSweeper
-                  .isGameOver;
-            }),
-            onExit: (_) => setState(() => hover = false),
-            child: AnimatedContainer(
-              decoration: vm.isVisible
-                  ? (vm.isBomb ? bombBox(context) : cleanBox(context))
-                  : hover
-                      ? hoverBox(context)
-                      : vm.isTagged ? flagBox(context) : unknownBox(context),
-              duration: Duration(milliseconds: 500),
-              child: Center(
-                  child: Text(vm.isVisible
-                      ? (vm.isBomb ?? false)
-                          ? "💣"
-                          : "${vm.neighbours == 0 ? "" : vm.neighbours}"
-                      : (vm.isTagged ? "🏳" : ""))),
+    return LayoutId(
+        id: "grid:${widget.x}:${widget.y}",
+        child: StoreConnector<AppState, MineSweeperNode>(
+          converter: (state) =>
+              state.state.mineSweeper.getNode(x: widget.x, y: widget.y),
+          distinct: true,
+          builder: (context, vm) => GestureDetector(
+            onTap: () {
+              Provider.of<Store<AppState>>(context).dispatch(
+                  TouchMineSweeperTileAction(x: widget.x, y: widget.y));
+            },
+            onLongPress: () {
+              Provider.of<Store<AppState>>(context).dispatch(
+                  FlagMineSweeperTileAction(x: widget.x, y: widget.y));
+            },
+            child: MouseRegion(
+              onEnter: (_) => setState(() {
+                hover = !Provider.of<Store<AppState>>(context)
+                    .state
+                    .mineSweeper
+                    .isGameOver;
+              }),
+              onExit: (_) => setState(() => hover = false),
+              child: AnimatedContainer(
+                decoration: vm.isVisible
+                    ? (vm.isBomb ? bombBox(context) : cleanBox(context))
+                    : hover
+                        ? hoverBox(context)
+                        : vm.isTagged ? flagBox(context) : unknownBox(context),
+                duration: Duration(milliseconds: hover?33:500),
+                child: Center(
+                    child: Text(vm.isVisible
+                        ? (vm.isBomb ?? false)
+                            ? "💣"
+                            : "${vm.neighbours == 0 ? "" : vm.neighbours}"
+                        : (vm.isTagged ? "🏳" : ""))),
+              ),
             ),
           ),
-        ),
-      ),
-    ));
+        ));
   }
 }
 
 bombBox(BuildContext context) => BoxDecoration(
-    color: Colors.red,
-    borderRadius: BorderRadius.circular(50),
-    border: Border.all(color: Colors.white),
-    boxShadow: [BoxShadow(color: Colors.blue)]);
+      color: Colors.red,
+      borderRadius: BorderRadius.circular(50),
+      border: Border.all(color: Colors.white),
+    );
 
 flagBox(BuildContext context) => BoxDecoration(
-    color: Theme.of(context).colorScheme.secondary,
-    borderRadius: BorderRadius.circular(50),
-    border: Border.all(color: Colors.green),
-    boxShadow: [BoxShadow(color: Colors.blue)]);
+      color: Theme.of(context).colorScheme.secondary,
+      borderRadius: BorderRadius.circular(50),
+      border: Border.all(color: Colors.green),
+    );
 
 hoverBox(BuildContext context) => BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryVariant,
-        border: Border.all(color: Colors.white, width: 2),
-        boxShadow: [
-          BoxShadow(color: Colors.black, blurRadius: 4, spreadRadius: 4)
-        ]);
+      color: Theme.of(context).colorScheme.primaryVariant,
+      border: Border.all(color: Colors.white, width: 2),
+    );
 
 unknownBox(BuildContext context) => BoxDecoration(
-    color: Theme.of(context).colorScheme.primaryVariant,
-    border: Border.all(color: Colors.transparent),
-    boxShadow: [BoxShadow(color: Colors.blue, blurRadius: 3, spreadRadius: 1)]);
+      color: Theme.of(context).colorScheme.primaryVariant,
+      border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.3), width: 1),
+      boxShadow: [BoxShadow()]
+    );
 
 cleanBox(BuildContext context) => BoxDecoration(
-    color: Theme.of(context).colorScheme.surface,
-    border: Border.all(color: Colors.white),
-    boxShadow: [BoxShadow(color: Colors.blue.withOpacity(0.1), blurRadius: 2)]);
+      color: Theme.of(context).colorScheme.surface,
+      border: Border.all(color: Colors.white),
+    );
