@@ -4,6 +4,7 @@ import 'package:mine_sweeper/src/scaffolding/mine_redux.dart';
 import 'package:mine_sweeper/src/state/app_state.dart';
 import 'package:mine_sweeper/src/state/mine_sweeper.dart';
 import 'package:mine_sweeper/src/state/mine_sweeper_node.dart';
+import 'package:redux_thunk/redux_thunk.dart';
 
 final difficultySizes = {
   "Easy": 50,
@@ -15,6 +16,15 @@ final difficultyBombPercentages = {
   "Easy": 0.1,
   "Medium": 0.2,
   "Hard": 0.3,  
+};
+
+ThunkAction<AppState> clearTiles = (store) async {
+  for (int i=0;i<store.state.mineSweeper.width;i++) {
+    await Future.delayed(Duration(milliseconds: 100));
+    store.dispatch(CleanBlanksAction());  
+  }
+      
+
 };
 
 class NewGameAction extends Reducer {

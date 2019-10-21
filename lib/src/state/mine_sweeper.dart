@@ -44,9 +44,11 @@ abstract class MineSweeper implements Built<MineSweeper, MineSweeperBuilder> {
 
   BuiltList<MineSweeperNode> get nodes;
 
-  int get flagCount => nodes.fold(0, (value, node)=>value+(node.isTagged?1:0));
+  int get flagCount =>
+      nodes.fold(0, (value, node) => value + (node.isTagged ? 1 : 0));
 
-  int get notFlipped => nodes.fold(0, (value, node)=>value+(node.isVisible?0:1));
+  int get notFlipped =>
+      nodes.fold(0, (value, node) => value + (node.isVisible ? 0 : 1));
   //Check for Visible Bombs (That's game over)
 
   bool get isWin => flagCount == bombs && notFlipped == bombs;
@@ -54,7 +56,7 @@ abstract class MineSweeper implements Built<MineSweeper, MineSweeperBuilder> {
     if (gameOverTime != null) {
       return true;
     }
-    //Win condition    
+    //Win condition
     if (isWin) {
       return true;
     }
@@ -72,7 +74,22 @@ abstract class MineSweeper implements Built<MineSweeper, MineSweeperBuilder> {
     }
   }
 
+  bool hasClearableBlanks() {
+    for (int x = 0; x < width; x++) {
+      for (int y = 0; y < height; y++) {
+        final node = getNode(x:x,y:y);
+        if (node.isVisible && node.neighbours == 0) {
+          if (!getNode(x:x+1,y:y).isVisible) return true;
+          if (!getNode(x:x-1,y:y).isVisible) return true;
+          if (!getNode(x:x,y:y+1).isVisible) return true;
+          if (!getNode(x:x,y:y-1).isVisible) return true;
 
+        }
+      }
+    }
+    return false;
+  }
+  
 }
 
 final MineSweeperNode emptyNode = MineSweeperNode.emptyNode();

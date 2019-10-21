@@ -29,8 +29,10 @@ class _MineBlockState extends State<MineBlock> {
           distinct: true,
           builder: (context, vm) => GestureDetector(
             onTap: () {
-              Provider.of<Store<AppState>>(context).dispatch(
+              final store = Provider.of<Store<AppState>>(context);
+              store.dispatch(
                   TouchMineSweeperTileAction(x: widget.x, y: widget.y));
+                  store.dispatch(clearTiles);
             },
             onLongPress: () {
               Provider.of<Store<AppState>>(context).dispatch(

@@ -12,9 +12,9 @@ abstract class MineSweeperNode
   
   factory MineSweeperNode.emptyNode() => MineSweeperNode((b)=>b
   ..isBomb = false
-  ..isVisible = false
+  ..isVisible = true
   ..isTagged = false
-  ..neighbours = 0);
+  ..neighbours = 1);
 
   bool get isVisible;
   bool get isTagged;
