@@ -60,14 +60,17 @@ class _GameTimerState extends State<GameTimer> {
   }
 
   @override
-  Widget build(BuildContext context) => StoreConnector<AppState, String>(
-      converter: (store) {
-        if (store.state.mineSweeper == null) return "";
-        return "⏲️${(store.state.mineSweeper.gameOverTime ?? DateTime.now()).difference(store.state.mineSweeper.startTime).inSeconds}";
-      },
-      distinct: true,
-      builder: (ctx, value) =>
-          Text(value, style: Theme.of(context).textTheme.title));
+  Widget build(BuildContext context) {
+    String value = "";
+    Store<AppState> store = Provider.of(context);
+
+    if (store.state.mineSweeper != null) {
+      value =
+          "⏲️${(store.state.mineSweeper.gameOverTime ?? DateTime.now()).difference(store.state.mineSweeper.startTime).inSeconds}";
+    }
+
+    return Text(value, style: Theme.of(context).textTheme.title);
+  }
 }
 
 class BombsRemaining extends StatelessWidget {
@@ -143,9 +146,10 @@ class MineFieldState extends State<MineField> {
 
 class GameInfoOverlay extends StatelessWidget {
   final MineFieldViewModel vm;
-  
+
   const GameInfoOverlay({
-    Key key, @required this.vm,
+    Key key,
+    @required this.vm,
   }) : super(key: key);
 
   @override
@@ -159,12 +163,13 @@ class GameInfoOverlay extends StatelessWidget {
                 height: double.infinity,
                 color: Theme.of(context).colorScheme.surface.withOpacity(0.4),
                 child: Center(
-                    child: Visibility(visible: !vm.started || vm.gameOver,
-                                          child: Container(
-                  decoration: BoxDecoration(
+                    child: Visibility(
+                  visible: !vm.started || vm.gameOver,
+                  child: Container(
+                    decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.surface,
                         border: Border.all()),
-                  child: Padding(
+                    child: Padding(
                       padding: const EdgeInsets.all(32.0),
                       child: Text(
                         vm.started
@@ -176,9 +181,9 @@ class GameInfoOverlay extends StatelessWidget {
                             : "Flutter Minesweeper",
                         style: Theme.of(context).textTheme.display1,
                       ),
+                    ),
                   ),
-                ),
-                    )))));
+                )))));
   }
 }
 

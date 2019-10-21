@@ -7,15 +7,15 @@ import 'package:mine_sweeper/src/state/mine_sweeper_node.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 final difficultySizes = {
-  "Easy": 50,
-  "Medium": 40,
-  "Hard": 30,  
+  "Easy": 70,
+  "Medium": 50,
+  "Hard": 40,  
 };
 
 final difficultyBombPercentages = {
   "Easy": 0.1,
-  "Medium": 0.2,
-  "Hard": 0.3,  
+  "Medium": 0.15,
+  "Hard": 0.2,  
 };
 
 ThunkAction<AppState> clearTiles = (store) async {
