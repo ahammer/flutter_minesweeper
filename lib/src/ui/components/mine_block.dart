@@ -52,7 +52,7 @@ class _MineBlockState extends State<MineBlock> {
                     : hover
                         ? hoverBox(context)
                         : vm.isTagged ? flagBox(context) : unknownBox(context),
-                duration: Duration(milliseconds: hover?33:500),
+                duration: Duration(milliseconds: hover?(100*vm.random).toInt():(250+vm.random*500).toInt()),
                 child: Center(
                     child: Text(vm.isVisible
                         ? (vm.isBomb ?? false)

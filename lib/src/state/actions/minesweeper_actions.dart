@@ -19,12 +19,11 @@ final difficultyBombPercentages = {
 };
 
 ThunkAction<AppState> clearTiles = (store) async {
-  for (int i=0;i<store.state.mineSweeper.width;i++) {
+  var game = store.state.mineSweeper;
+    for (int i=0;i<game.width+game.height;i++) {
     await Future.delayed(Duration(milliseconds: 100));
     store.dispatch(CleanBlanksAction());  
   }
-      
-
 };
 
 class NewGameAction extends Reducer {

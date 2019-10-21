@@ -14,13 +14,19 @@ class _$MineSweeperNode extends MineSweeperNode {
   @override
   final int neighbours;
   @override
+  final double random;
+  @override
   final bool isBomb;
 
   factory _$MineSweeperNode([void Function(MineSweeperNodeBuilder) updates]) =>
       (new MineSweeperNodeBuilder()..update(updates)).build();
 
   _$MineSweeperNode._(
-      {this.isVisible, this.isTagged, this.neighbours, this.isBomb})
+      {this.isVisible,
+      this.isTagged,
+      this.neighbours,
+      this.random,
+      this.isBomb})
       : super._() {
     if (isVisible == null) {
       throw new BuiltValueNullFieldError('MineSweeperNode', 'isVisible');
@@ -30,6 +36,9 @@ class _$MineSweeperNode extends MineSweeperNode {
     }
     if (neighbours == null) {
       throw new BuiltValueNullFieldError('MineSweeperNode', 'neighbours');
+    }
+    if (random == null) {
+      throw new BuiltValueNullFieldError('MineSweeperNode', 'random');
     }
   }
 
@@ -48,14 +57,17 @@ class _$MineSweeperNode extends MineSweeperNode {
         isVisible == other.isVisible &&
         isTagged == other.isTagged &&
         neighbours == other.neighbours &&
+        random == other.random &&
         isBomb == other.isBomb;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
-        $jc($jc($jc(0, isVisible.hashCode), isTagged.hashCode),
-            neighbours.hashCode),
+        $jc(
+            $jc($jc($jc(0, isVisible.hashCode), isTagged.hashCode),
+                neighbours.hashCode),
+            random.hashCode),
         isBomb.hashCode));
   }
 
@@ -65,6 +77,7 @@ class _$MineSweeperNode extends MineSweeperNode {
           ..add('isVisible', isVisible)
           ..add('isTagged', isTagged)
           ..add('neighbours', neighbours)
+          ..add('random', random)
           ..add('isBomb', isBomb))
         .toString();
   }
@@ -86,6 +99,10 @@ class MineSweeperNodeBuilder
   int get neighbours => _$this._neighbours;
   set neighbours(int neighbours) => _$this._neighbours = neighbours;
 
+  double _random;
+  double get random => _$this._random;
+  set random(double random) => _$this._random = random;
+
   bool _isBomb;
   bool get isBomb => _$this._isBomb;
   set isBomb(bool isBomb) => _$this._isBomb = isBomb;
@@ -97,6 +114,7 @@ class MineSweeperNodeBuilder
       _isVisible = _$v.isVisible;
       _isTagged = _$v.isTagged;
       _neighbours = _$v.neighbours;
+      _random = _$v.random;
       _isBomb = _$v.isBomb;
       _$v = null;
     }
@@ -123,6 +141,7 @@ class MineSweeperNodeBuilder
             isVisible: isVisible,
             isTagged: isTagged,
             neighbours: neighbours,
+            random: random,
             isBomb: isBomb);
     replace(_$result);
     return _$result;

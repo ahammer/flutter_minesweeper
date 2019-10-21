@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -8,13 +10,14 @@ import 'package:provider/provider.dart';
 import 'package:redux/redux.dart';
 
 const kBoardEdgePadding = 1.0;
+GlobalKey mineField = GlobalKey<MineFieldState>();
 
 ///
-///The GameBoard consisting of the
-///Top Area
-/// - Mines - Flags
-/// - Restart button
-/// - Timer
+///The GameBoard Area
+///The board overlay
+///The game timer
+///The bomb counter
+
 ///
 ///Mine Field
 class GameBoard extends StatelessWidget {
@@ -27,58 +30,34 @@ class GameBoard extends StatelessWidget {
     return Container(
       width: double.infinity,
       child: Padding(
-    padding: const EdgeInsets.all(kBoardEdgePadding),
-    child: MineField(),
+        padding: const EdgeInsets.all(kBoardEdgePadding),
+        child: MineField(),
       ),
     );
   }
 }
 
-///
-/// Header Section of the Gameboard
-/// Has the Score, The Timer, and the Reset button
-class GameBoardHeader extends StatelessWidget {
-  const GameBoardHeader({
-    Key key,
-  }) : super(key: key);
+class GameTimer extends StatefulWidget {
+  const GameTimer();
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Row(
-        children: <Widget>[
-          const Expanded(
-            child: const Center(child: const BombsRemaining()),
-          ),
-          Expanded(child: Container()),
-          Center(
-              child: FlatButton(
-            child: Text(
-              "😀",
-              textScaleFactor: 1.5,
-            ),
-            onPressed: () {
-              final mq = MediaQuery.of(context);
-              Provider.of<Store<AppState>>(context).dispatch(NewGameAction(
-                  width: mq.size.width.toInt(),
-                  height: mq.size.height.toInt(),
-                  difficulty: "easy"));
-            },
-          )),
-          Expanded(child: Container()),
-          const Expanded(
-            child: const Center(child: const GameTimer()),
-          ),
-        ],
-      ),
-    );
-  }
+  _GameTimerState createState() => _GameTimerState();
 }
 
+class _GameTimerState extends State<GameTimer> {
+  Timer timer;
 
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(Duration(seconds: 1), (_) => setState(() {}));
+  }
 
-class GameTimer extends StatelessWidget {
-  const GameTimer();
+  @override
+  void dispose() {
+    super.dispose();
+    timer.cancel();
+  }
 
   @override
   Widget build(BuildContext context) => StoreConnector<AppState, String>(
@@ -105,7 +84,6 @@ class BombsRemaining extends StatelessWidget {
           Text(value, style: Theme.of(context).textTheme.title));
 }
 
-GlobalKey mineField = GlobalKey<MineFieldState>();
 class MineField extends StatefulWidget {
   const MineField({
     Key key,
@@ -151,34 +129,57 @@ class MineFieldState extends State<MineField> {
                   children: <Widget>[
                     ...vm.started
                         ? [
-                          CustomMultiChildLayout(delegate: GameBoardLayoutDelegate(vm.width, vm.height),children: children),                      
+                            CustomMultiChildLayout(
+                                delegate: GameBoardLayoutDelegate(
+                                    vm.width, vm.height),
+                                children: children),
                           ]
                         : [],
-                    IgnorePointer(
-                        child: AnimatedOpacity(
-                            opacity: vm.gameOver ? 1 : 0,
-                            duration: Duration(seconds: 1),
-                            child: Container(
-                                width: double.infinity,
-                                height: double.infinity,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .surface
-                                    .withOpacity(0.6),
-                                child: Center(
-                                    child: Text(
-                                  vm.started
-                                      ? vm.gameOver
-                                          ? vm.win
-                                              ? "🔥🔥 You Win 🔥🔥"
-                                              : "💩💩 Game Over 💩💩"
-                                          : ""
-                                      : "Flutter Minesweeper",
-                                  style: Theme.of(context).textTheme.display1,
-                                )))))
+                    GameInfoOverlay(vm: vm)
                   ],
                 );
               }));
+}
+
+class GameInfoOverlay extends StatelessWidget {
+  final MineFieldViewModel vm;
+  
+  const GameInfoOverlay({
+    Key key, @required this.vm,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+        child: AnimatedOpacity(
+            opacity: vm.gameOver ? 1 : 0,
+            duration: Duration(seconds: 1),
+            child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: Theme.of(context).colorScheme.surface.withOpacity(0.4),
+                child: Center(
+                    child: Visibility(visible: !vm.started || vm.gameOver,
+                                          child: Container(
+                  decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        border: Border.all()),
+                  child: Padding(
+                      padding: const EdgeInsets.all(32.0),
+                      child: Text(
+                        vm.started
+                            ? vm.gameOver
+                                ? vm.win
+                                    ? "🔥🔥 You Win 🔥🔥"
+                                    : "💩💩 Game Over 💩💩"
+                                : ""
+                            : "Flutter Minesweeper",
+                        style: Theme.of(context).textTheme.display1,
+                      ),
+                  ),
+                ),
+                    )))));
+  }
 }
 
 class MineFieldViewModel {
@@ -211,19 +212,18 @@ class GameBoardLayoutDelegate extends MultiChildLayoutDelegate {
   void performLayout(Size size) {
     final cw = size.width / width;
     final ch = size.height / height;
-    
-    for (int y=0;y<height;y++) {
-      for (int x=0;x<width;x++) {
+
+    for (int y = 0; y < height; y++) {
+      for (int x = 0; x < width; x++) {
         String id = "grid:$x:$y";
-        layoutChild(id, BoxConstraints.expand(width:cw, height:ch));
-        positionChild(id, Offset(x*cw, y*ch));        
+        layoutChild(id, BoxConstraints.expand(width: cw, height: ch));
+        positionChild(id, Offset(x * cw, y * ch));
       }
     }
   }
 
   @override
-  bool shouldRelayout(MultiChildLayoutDelegate oldDelegate) {    
+  bool shouldRelayout(MultiChildLayoutDelegate oldDelegate) {
     return false;
   }
-
 }

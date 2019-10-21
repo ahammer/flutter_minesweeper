@@ -10,14 +10,14 @@ class _$AppState extends AppState {
   @override
   final String theme;
   @override
-  final MineSweeper mineSweeper;
-  @override
   final String difficulty;
+  @override
+  final MineSweeper mineSweeper;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
       (new AppStateBuilder()..update(updates)).build();
 
-  _$AppState._({this.theme, this.mineSweeper, this.difficulty}) : super._() {
+  _$AppState._({this.theme, this.difficulty, this.mineSweeper}) : super._() {
     if (theme == null) {
       throw new BuiltValueNullFieldError('AppState', 'theme');
     }
@@ -38,22 +38,22 @@ class _$AppState extends AppState {
     if (identical(other, this)) return true;
     return other is AppState &&
         theme == other.theme &&
-        mineSweeper == other.mineSweeper &&
-        difficulty == other.difficulty;
+        difficulty == other.difficulty &&
+        mineSweeper == other.mineSweeper;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc($jc(0, theme.hashCode), mineSweeper.hashCode),
-        difficulty.hashCode));
+    return $jf($jc($jc($jc(0, theme.hashCode), difficulty.hashCode),
+        mineSweeper.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('AppState')
           ..add('theme', theme)
-          ..add('mineSweeper', mineSweeper)
-          ..add('difficulty', difficulty))
+          ..add('difficulty', difficulty)
+          ..add('mineSweeper', mineSweeper))
         .toString();
   }
 }
@@ -65,23 +65,23 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   String get theme => _$this._theme;
   set theme(String theme) => _$this._theme = theme;
 
+  String _difficulty;
+  String get difficulty => _$this._difficulty;
+  set difficulty(String difficulty) => _$this._difficulty = difficulty;
+
   MineSweeperBuilder _mineSweeper;
   MineSweeperBuilder get mineSweeper =>
       _$this._mineSweeper ??= new MineSweeperBuilder();
   set mineSweeper(MineSweeperBuilder mineSweeper) =>
       _$this._mineSweeper = mineSweeper;
 
-  String _difficulty;
-  String get difficulty => _$this._difficulty;
-  set difficulty(String difficulty) => _$this._difficulty = difficulty;
-
   AppStateBuilder();
 
   AppStateBuilder get _$this {
     if (_$v != null) {
       _theme = _$v.theme;
-      _mineSweeper = _$v.mineSweeper?.toBuilder();
       _difficulty = _$v.difficulty;
+      _mineSweeper = _$v.mineSweeper?.toBuilder();
       _$v = null;
     }
     return this;
@@ -107,8 +107,8 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _$result = _$v ??
           new _$AppState._(
               theme: theme,
-              mineSweeper: _mineSweeper?.build(),
-              difficulty: difficulty);
+              difficulty: difficulty,
+              mineSweeper: _mineSweeper?.build());
     } catch (_) {
       String _$failedField;
       try {

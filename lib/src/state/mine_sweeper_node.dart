@@ -14,12 +14,13 @@ abstract class MineSweeperNode
   ..isBomb = false
   ..isVisible = true
   ..isTagged = false
-  ..neighbours = 1);
+  ..neighbours = 1
+  ..random = 0);
 
   bool get isVisible;
   bool get isTagged;
   int get neighbours;
-  
+  double get random;
   //We don't decide bombs until after the first tap
   @nullable
   bool get isBomb;  

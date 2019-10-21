@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:built_value/built_value.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:flutter/foundation.dart';
@@ -22,7 +24,8 @@ abstract class MineSweeper implements Built<MineSweeper, MineSweeperBuilder> {
       nodes.add(MineSweeperNode((b) => b
         ..neighbours = 0
         ..isVisible = false
-        ..isTagged = false));
+        ..isTagged = false
+        ..random = Random().nextDouble()));
     }
 
     //Build the MineSweeper game object
