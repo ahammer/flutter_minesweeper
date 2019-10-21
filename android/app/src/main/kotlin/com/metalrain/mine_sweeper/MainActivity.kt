@@ -1,4 +1,4 @@
-package com.example.mine_sweeper
+package com.metalrain.mine_sweeper
 
 import android.os.Bundle
 import io.flutter.app.FlutterActivity

@@ -175,8 +175,8 @@ class GameInfoOverlay extends StatelessWidget {
                         vm.started
                             ? vm.gameOver
                                 ? vm.win
-                                    ? "🔥🔥 You Win 🔥🔥"
-                                    : "💩💩 Game Over 💩💩"
+                                    ? "🔥You Win🔥"
+                                    : "💩Game Over💩"
                                 : ""
                             : "Flutter Minesweeper",
                         style: Theme.of(context).textTheme.display1,

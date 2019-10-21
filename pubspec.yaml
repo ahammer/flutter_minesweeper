@@ -1,7 +1,7 @@
 name: mine_sweeper
 description: A new Flutter project.
 
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: ">=2.5.0 <3.0.0"
