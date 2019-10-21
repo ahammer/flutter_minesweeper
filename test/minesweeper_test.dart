@@ -13,14 +13,14 @@ main() {
     final AppState appState = AppState.getDefault();
     expect(appState.mineSweeper.getNode(x:4, y:4).isVisible, equals(false));
 
-    final AppState newState = TouchMineSweeperTileAction(x:4,y:4).reduce(appState);
+    final AppState newState = TouchMineSweeperTileAction(x:4,y:4).reducer(appState);
     expect(newState.mineSweeper.getNode(x:4, y:4).isVisible, equals(true));    
   });
 
   test("Test mine generation", () {
     final AppState appState = AppState.getDefault();
     //Fake a touch
-    final AppState newState = TouchMineSweeperTileAction(x:4,y:4).reduce(appState);
+    final AppState newState = TouchMineSweeperTileAction(x:4,y:4).reducer(appState);
     int bombCount = newState.mineSweeper.nodes.fold(0, (value, node) => value + (node.isBomb?1:0));
     expect(bombCount, equals(newState.mineSweeper.bombs));
   });
