@@ -10,7 +10,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 
 class MinesweeperApp extends StatelessWidget {
-  final store =Store<AppState>(minesweepReducer, initialState: AppState.getDefault(), middleware: [thunkMiddleware]);
+  final store = Store<AppState>(minesweepReducer, initialState: AppState.getDefault(), middleware: [thunkMiddleware]);
 
   @override
   Widget build(BuildContext context) => Provider.value(
