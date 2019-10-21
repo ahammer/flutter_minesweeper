@@ -13,6 +13,7 @@ class GameScreen extends StatelessWidget {
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(        
         actions: <Widget>[
+          // This is the AppBar Action list
           Container(width:20),
           Center(child: ThemeSelectWidget()),
           Container(width:20),
@@ -22,14 +23,11 @@ class GameScreen extends StatelessWidget {
             final query = MediaQuery.of(context);
             store.dispatch(NewGameAction(difficulty: store.state.difficulty, width: query.size.width.toInt(), height: query.size.height.toInt()));
           })),
-          Expanded(child: Container()),
-          
+          Expanded(child: Container()),          
           Center(child: Container(child: BombsRemaining())),    
           Container(width:20),
           Center(child:GameTimer()),    
-          Container(width:20),
-          
-          
+          Container(width:20),                    
         ],
       ),
       body: GameBoard());
