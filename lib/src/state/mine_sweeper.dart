@@ -76,22 +76,6 @@ abstract class MineSweeper implements Built<MineSweeper, MineSweeperBuilder> {
       return emptyNode;
     }
   }
-
-  bool hasClearableBlanks() {
-    for (int x = 0; x < width; x++) {
-      for (int y = 0; y < height; y++) {
-        final node = getNode(x:x,y:y);
-        if (node.isVisible && node.neighbours == 0) {
-          if (!getNode(x:x+1,y:y).isVisible) return true;
-          if (!getNode(x:x-1,y:y).isVisible) return true;
-          if (!getNode(x:x,y:y+1).isVisible) return true;
-          if (!getNode(x:x,y:y-1).isVisible) return true;
-
-        }
-      }
-    }
-    return false;
-  }
   
 }
 
