@@ -18,6 +18,9 @@ final difficultyBombPercentages = {
   "Hard": 0.2,  
 };
 
+//Max cells in one dimension
+const kMaxCells1D = 20;
+
 ThunkAction<AppState> clearTiles = (store) async {
   var game = store.state.mineSweeper;
     for (int i=0;i<game.width+game.height;i++) {
@@ -35,8 +38,30 @@ class NewGameAction extends Reducer {
 
   @override
   get reducer {
-    final w = (width~/difficultySizes[difficulty]);
-    final h = (height~/difficultySizes[difficulty]);
+    var w = (width~/difficultySizes[difficulty]);
+    var h = (height~/difficultySizes[difficulty]);
+
+    //Clamp to a max size (for performance)
+    //Basically, if one aspect ratio, scale down the kMaxCells1D on X, otherwise do on Y
+    //Maintains aspect ratio, which I want to be squareish.    
+
+      if (w > kMaxCells1D) {
+        final r = kMaxCells1D / w;
+        w = kMaxCells1D;
+        h = (h * r).toInt();
+      } 
+
+    /*
+    if (w > h) {
+    } else {
+      if (h > kMaxCells1D) {
+        final r = kMaxCells1D / h;
+        h = kMaxCells1D;
+        w = (r * kMaxCells1D).toInt();
+      } 
+    }
+    */
+
     return (oldState) => oldState.rebuild((b) {
       return b
       ..mineSweeper.replace(MineSweeper.newGame(

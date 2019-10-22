@@ -69,7 +69,7 @@ abstract class MineSweeper implements Built<MineSweeper, MineSweeperBuilder> {
 
   bool isInBounds(int x, int y) => x >= 0 && y >= 0 && x < width && y < height;
 
-  MineSweeperNode getNode({@required int x, @required int y}) {
+  MineSweeperNode getNode({@required int x, @required int y}) {    
     try {
       return nodes[x + y * width];
     } catch (exception) {
