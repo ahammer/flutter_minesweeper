@@ -73,7 +73,7 @@ bombBox(BuildContext context) => BoxDecoration(
 
 flagBox(BuildContext context) => BoxDecoration(
       color: Theme.of(context).colorScheme.secondaryVariant,      
-      border: Border.all(color: Theme.of(context).colorScheme.secondary, width: 3),
+      border: Border.all(color: Theme.of(context).colorScheme.secondary, width: 15),
     );
 
 hoverBox(BuildContext context) => BoxDecoration(
@@ -83,10 +83,10 @@ hoverBox(BuildContext context) => BoxDecoration(
 
 unknownBox(BuildContext context) => BoxDecoration(
       color: Theme.of(context).colorScheme.primaryVariant,
-      border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.3), width: 1),
+      border: Border.all(color: Theme.of(context).colorScheme.primary, width: 1),
     );
 
 cleanBox(BuildContext context) => BoxDecoration(
       color: Theme.of(context).colorScheme.surface,
-      border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.3), width: 1),
+      border: Border.all(color: Theme.of(context).colorScheme.primary, width: 1),
     );
