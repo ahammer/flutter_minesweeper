@@ -67,15 +67,13 @@ class _MineBlockState extends State<MineBlock> {
 }
 
 bombBox(BuildContext context) => BoxDecoration(
-      color: Colors.red,
-      borderRadius: BorderRadius.circular(50),
+      color: Colors.red,      
       border: Border.all(color: Colors.white),
     );
 
 flagBox(BuildContext context) => BoxDecoration(
-      color: Theme.of(context).colorScheme.primaryVariant,
-      borderRadius: BorderRadius.circular(50),
-      border: Border.all(color: Colors.green),
+      color: Theme.of(context).colorScheme.secondaryVariant,      
+      border: Border.all(color: Theme.of(context).colorScheme.secondary, width: 3),
     );
 
 hoverBox(BuildContext context) => BoxDecoration(
@@ -86,7 +84,6 @@ hoverBox(BuildContext context) => BoxDecoration(
 unknownBox(BuildContext context) => BoxDecoration(
       color: Theme.of(context).colorScheme.primaryVariant,
       border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.3), width: 1),
-      boxShadow: [BoxShadow()]
     );
 
 cleanBox(BuildContext context) => BoxDecoration(

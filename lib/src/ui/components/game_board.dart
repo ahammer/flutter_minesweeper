@@ -3,14 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:mine_sweeper/src/state/actions/minesweeper_actions.dart';
 import 'package:mine_sweeper/src/state/app_state.dart';
 import 'package:mine_sweeper/src/ui/components/mine_block.dart';
 import 'package:provider/provider.dart';
 import 'package:redux/redux.dart';
 
 const kBoardEdgePadding = 1.0;
-GlobalKey mineField = GlobalKey<MineFieldState>();
+
 
 ///
 ///The GameBoard Area
@@ -87,17 +86,11 @@ class BombsRemaining extends StatelessWidget {
           Text(value, style: Theme.of(context).textTheme.title));
 }
 
-class MineField extends StatefulWidget {
+class MineField extends StatelessWidget {
   const MineField({
     Key key,
   }) : super(key: key);
 
-  @override
-  MineFieldState createState() => MineFieldState();
-}
-
-class MineFieldState extends State<MineField> {
-  Constraints constraints;
   @override
   Widget build(BuildContext context) => LayoutBuilder(
       builder: (context, constraints) =>
